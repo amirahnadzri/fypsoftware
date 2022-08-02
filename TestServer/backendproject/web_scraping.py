@@ -25,10 +25,10 @@ from selenium.webdriver.common.by import By
 
 sys.path.insert(0,'/usr/lib/chromium-browser/chromedriver')
 
-chrome_options = webdriver.ChromeOptions()
-chrome_options.add_argument('--headless')
-chrome_options.add_argument('--no-sandbox')
-chrome_options.add_argument('--disable-dev-shm-usage')
+options = webdriver.ChromeOptions()
+options.add_argument('--headless')
+options.add_argument('--no-sandbox')
+options.add_argument('--disable-dev-shm-usage')
 
 """This function is to check if it is a chemical"""
 def get_idfromkeyword_chebicheck(keyword):
