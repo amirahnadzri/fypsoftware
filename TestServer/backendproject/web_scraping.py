@@ -77,7 +77,7 @@ def get_idfromkeyword2(keyword):
 
 """This function is to get the parents list"""
 def get_category(keyword_id, keyword, i):
-      wd = webdriver.Chrome('chromedriver',chrome_options=chrome_options)
+      wd = webdriver.Chrome('chromedriver',options=options)
       wd.get("https://ontobee.org/ontology/FOODON?iri=http://purl.obolibrary.org/obo/"+keyword_id)
       h1 = wd.find_elements(By.CLASS_NAME, value="hierarchy")
       
@@ -100,7 +100,7 @@ def get_category(keyword_id, keyword, i):
 
 
 def get_category_alcohol(keyword_id, keyword, i):
-      wd = webdriver.Chrome('chromedriver',chrome_options=chrome_options)
+      wd = webdriver.Chrome('chromedriver',options=options)
       wd.get("https://ontobee.org/ontology/NCIT?iri=http://purl.obolibrary.org/obo/"+keyword_id)
       h1 = wd.find_elements(By.CLASS_NAME, value="hierarchy")
       
