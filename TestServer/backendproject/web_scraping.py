@@ -122,7 +122,7 @@ def get_category_alcohol(keyword_id, keyword, i):
       return res
 
 def final_category(category_list):
-      to_find = [ "beef", "pork", "chicken","egg","fish", "seafood","vegetable","nut", "dairy","fruit", "alcohol", "herb","plant", "animal", "water", "chemical"]
+      to_find = [ "beef", "pork", "chicken","egg","fish", "milk","seafood","vegetable","nut", "dairy","fruit", "alcohol", "herb","plant", "animal", "water", "chemical"]
       count = 0
       
       category_list = [each_string.lower() for each_string in category_list]
@@ -131,7 +131,7 @@ def final_category(category_list):
         if str_match:
           break
         count = count + 1
-      if count == 16:
+      if count == 17:
         return "not in category"
       if to_find[count] == "fruit" or to_find[count] == "vegetable" or to_find[count] == "herb" :
         return to_find[12]
@@ -140,7 +140,7 @@ def final_category(category_list):
 def main(ingredient):
   test = ingredient.split(" ")
   ingredient = ingredient.replace(" ","+")
-  trigger = [ "corn", "seed", "beans", "peas", "soy", "wine","coconut"]
+  trigger = [ "corn", "seed", "beans", "peas", "soy", "wine","coconut","cream"]
   test = [each_string.lower() for each_string in test]
   if final_category(test) == "not in category" or final_category(test) == "nut":
     count2 = 0
@@ -154,6 +154,8 @@ def main(ingredient):
     if count2 < 7:
       if (trigger[count2] == "corn") or (trigger[count2] == "coconut") or (trigger[count2] == "seed") or (trigger[count2] == "corn") or (trigger[count2] == "peas") or (trigger[count2] == "beans") or (trigger[count2] == "soy"):
         return "plant"
+      elif (trigger[count2] == "cream"):
+        return "milk"
       elif (trigger[count2] == "wine"):
         return "alcohol"
   try:
