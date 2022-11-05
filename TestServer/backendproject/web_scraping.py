@@ -1,4 +1,3 @@
-
 import requests
 from bs4 import BeautifulSoup
 import requests
@@ -167,12 +166,4 @@ def main(ingredient):
     if result == "alcohol":
       category_list = get_category_alcohol(keyword_id, ingredient,i)
       result = final_category(category_list)
-
   return result
-
-
-ingredient_name = sys.argv[1]
-
-i = 0
-result = main(ingredient_name)
-print(result)
