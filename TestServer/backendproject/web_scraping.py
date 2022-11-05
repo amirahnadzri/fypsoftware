@@ -1,26 +1,9 @@
 
-#pip install selenium
-
-#pip install webdriver-manager
-
-#!apt install chromium-chromedriver
-#!cp /usr/local/lib/chromium-browser/chromedriver /usr/bin
-#cp /usr/local/lib/python3.9/site-packages/chromedriver-py /usr/local/bin
-
-
 import requests
 from bs4 import BeautifulSoup
-import xml.etree.ElementTree as ET
-import re
-import gc
 import requests
-from google.colab import files
-import pandas as pd
-import io
-import math
 import sys
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 
 sys.path.insert(0,'/usr/lib/chromium-browser/chromedriver')

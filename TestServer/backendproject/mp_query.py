@@ -1,4 +1,4 @@
-import web_scraping
+from web_scraping import *
 
 from multiprocessing import Process, Manager
 from time import sleep
