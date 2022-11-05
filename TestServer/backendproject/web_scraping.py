@@ -166,4 +166,7 @@ def main(ingredient):
     if result == "alcohol":
       category_list = get_category_alcohol(keyword_id, ingredient,i)
       result = final_category(category_list)
+      
   return result
+  
+i = 0
