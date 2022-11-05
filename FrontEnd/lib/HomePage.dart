@@ -31,7 +31,7 @@ class HomePage extends StatefulWidget{
   _HomePageState createState() =>_HomePageState();
 }
 
-// TODO BOTTOM NAVIGATION BAR
+////////////////////////////////////////////////////////////////////////////////TODO BOTTOM NAVIGATION BAR
 class _HomePageState extends State<HomePage>{
 
   int _currentIndex =0;
@@ -39,25 +39,29 @@ class _HomePageState extends State<HomePage>{
   static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static final List<Widget> _widgetOptions = <Widget>[
     const ScanNav(),
-    //HistoryNav(),
     //ProfileNav(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      body: Container(
+        constraints: BoxConstraints.expand(),
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/images/homepagebg.png'),
+                fit: BoxFit.cover,
+                colorFilter: ColorFilter.mode(Colors.black87, BlendMode.darken)
+            )
+        ),
         child: _widgetOptions.elementAt(_currentIndex),
+
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const [
           BottomNavigationBarItem(
               icon: Icon(Icons.camera),
               label: 'Scan'
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.book),
-            label: 'History'
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
@@ -70,7 +74,9 @@ class _HomePageState extends State<HomePage>{
             _currentIndex = index;
           });
         },
-        selectedItemColor: Colors.amber,
+        backgroundColor: Color(0xff816797),
+        unselectedItemColor: Colors.white,
+        selectedItemColor: Colors.black,
       ),
     );
   }
@@ -110,22 +116,31 @@ class ScanNav extends StatelessWidget{
 */
 
 
-// TODO SCAN IMAGE FEATURE
+////////////////////////////////////////////////////////////////////////////////TODO SCAN IMAGE FEATURE
 class _ScanNavState extends State<ScanNav> {
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              height: 800,
-              child: pickImg(),
-            ),
-          ],
+      body: Container(
+        constraints: BoxConstraints.expand(),
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage('assets/images/homepagebg.png'),
+              fit: BoxFit.cover,
+              colorFilter: ColorFilter.mode(Colors.black87, BlendMode.darken)
+          )
         ),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                height: 800,
+                child: pickImg(),
+              ),
+            ],
+          ),
 
         /*
         child: Column(
@@ -140,6 +155,7 @@ class _ScanNavState extends State<ScanNav> {
         ),
         */
 
+        ),
       ),
     );
   }
@@ -182,73 +198,72 @@ class pickImg extends StatefulWidget {
   _pickImgState createState() => _pickImgState();
 }
 
+////////////////////////////////////////////////////////////////////TODO CHOOSE IMAGE PROCESS
+
 class _pickImgState extends State<pickImg>{
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      body: Center(
+      body: Container(
+          constraints: BoxConstraints.expand(),
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/images/homepagebg.png'),
+                  fit: BoxFit.cover,
+              )
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
 
-              //TODO IMAGE CONTAINER
-              Padding(
-                padding: const EdgeInsets.only(
-                    top:0.0,
-                    bottom: 10.0
-                ),
-                child: Center(
-                  child: Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black26,
-                          )
+                  //////////////////////////////////////////////////////////////TODO TAKE PHOTO BUTTON
+
+                  Container(
+                    height: 120,
+                    width: 120,
+                    decoration: BoxDecoration(
+                        color: Color(0xfff1e3c9),
+                        borderRadius: BorderRadius.circular(100),
+                        border: Border.all(color: Colors.black, width: 5)),
+                    child: TextButton(
+                      onPressed: () {
+                        _TakePhoto(context);
+                      },
+                      child: const Text('Take photo', textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.black, fontSize: 15),
                       ),
-                      width: 150,
-                      height: 200,
-                      child: Image.asset('assets/images/yoshi.png')
+                    ),
                   ),
-                ),
-              ),
 
-              //TODO TAKE PHOTO BUTTON
-              Container(
-                height: 50,
-                width: 320,
-                decoration: BoxDecoration(
-                    color: Colors.blue, borderRadius: BorderRadius.circular(10)),
-                child: TextButton(
-                  onPressed: () {
-                    _TakePhoto(context);
-                  },
-                  child: const Text('Take photo',
-                    style: TextStyle(color: Colors.white, fontSize: 20),
+                  const SizedBox(
+                    width: 100,
                   ),
-                ),
-              ),
 
+                  //////////////////////////////////////////////////////////////TODO CHOOSE FROM GALLERY BUTTON
+
+                  Container(
+                    height: 120,
+                    width: 120,
+                    decoration: BoxDecoration(
+                        color: Color(0xfff1e3c9),
+                        borderRadius: BorderRadius.circular(100),
+                        border: Border.all(color: Colors.black, width: 5)),
+                    child: TextButton(
+                      onPressed: () {
+                        _ChooseGallery(context);
+                      },
+                      child: const Text('Choose from Gallery', textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.black, fontSize: 15),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               const SizedBox(
-                height: 5,
-              ),
-              const Text('or'),
-              const SizedBox(
-                height: 5,
-              ),
-
-              //TODO CHOOSE FROM GALLERY BUTTON
-              Container(
-                height: 50,
-                width: 320,
-                decoration: BoxDecoration(
-                    color: Colors.grey, borderRadius: BorderRadius.circular(10)),
-                child: TextButton(
-                  onPressed: () {
-                    _ChooseGallery(context);
-                  },
-                  child: const Text('Choose from Gallery',
-                    style: TextStyle(color: Colors.white, fontSize: 20),
-                  ),
-                ),
+               height: 50,
               ),
             ],
           )
@@ -256,7 +271,8 @@ class _pickImgState extends State<pickImg>{
     );
   }
 
-//TODO OPEN CAMERA AND TAKE PHOTO FUNCTION
+////////////////////////////////////////////////////////////////////////////////TODO OPEN CAMERA AND TAKE PHOTO FUNCTION
+
   Future<void> _TakePhoto(BuildContext c) async {
     _pickedFile = await ImagePicker().getImage(
         source: ImageSource.camera
@@ -264,7 +280,8 @@ class _pickImgState extends State<pickImg>{
     _cropImage(_pickedFile.path);
   }
 
-  //TODO CHOOSE FROM GALLERY FUNCTION
+////////////////////////////////////////////////////////////////////////////////TODO CHOOSE FROM GALLERY FUNCTION
+
   Future<void> _ChooseGallery(BuildContext c) async {
     _pickedFile = await ImagePicker().getImage(
         source: ImageSource.gallery
@@ -272,7 +289,8 @@ class _pickImgState extends State<pickImg>{
     _cropImage(_pickedFile.path);
   }
 
-  //TODO CROP IMAGE FUNCTION
+////////////////////////////////////////////////////////////////////////////////TODO CROP IMAGE FUNCTION
+
   Future<void> _cropImage(filepath) async {
     _croppedImage = await ImageCropper().cropImage(
         sourcePath: filepath,
@@ -361,41 +379,47 @@ class _showResState extends State<showRes>{
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+
+                  //////////////////////////////////////////////////////////////TODO INGR EDIT TEXT FIELD
+
                   SizedBox(
-                      height: 60,
+                      height: 50,
                       child: TextField(
                         controller: _controller,
                         autofocus: true,
                         onSubmitted: (val) {
-                      _addToDoItem(val);
-                      _controller.clear();
-                    },
+                        _addToDoItem(val);
+                        _controller.clear();
+                        },
                         style: const TextStyle(
-                          fontSize: 18,
+                          fontSize: 15,
                         ),
                         decoration: const InputDecoration(
                           hintText: 'Insert ingredient',
                           enabledBorder: OutlineInputBorder(
                             borderRadius:
                             BorderRadius.all(Radius.circular(12.0)),
-                            borderSide: BorderSide(color: Colors.red, width: 2),
+                            borderSide: BorderSide(color: Color.fromRGBO(81,85,126, 1), width: 2),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius:
                             BorderRadius.all(Radius.circular(12.0)),
-                            borderSide: BorderSide(color: Colors.red, width: 2),
+                            borderSide: BorderSide(color: Color.fromRGBO(81,85,126, 1), width: 2),
                           ),
                         ),
                       )),
+
+                  //////////////////////////////////////////////////////////////TODO EDIT INGR DONE BUTTON
+
                   Container(
-                    height: 65,
+                    height: 40,
                     width: double.infinity,
                     margin: const EdgeInsets.only(
                       top: 5,
                     ),
                     child: RaisedButton(
                       textColor: Colors.white,
-                      color: Colors.red,
+                      color: Color.fromRGBO(81,85,126, 1),
                       child: const Text('Done', style: TextStyle(fontSize: 18)),
                       shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(12)),
@@ -408,6 +432,7 @@ class _showResState extends State<showRes>{
                       },
                     ),
                   ),
+
                 ],
               ),
             ),
@@ -417,17 +442,23 @@ class _showResState extends State<showRes>{
 
   Widget _buildToDoItem(String toDoText, int index) {
     return SizedBox(
+
+      ////////////////////////////////////////////////////////////////////////TODO EACH INGR LIST ITEM
+
       child: Container(
-        height: 70,
+        height: 60,
         margin: const EdgeInsets.only(
-          left: 20.0,
-          right: 20.0,
+          left: 10.0,
+          right: 10.0,
           bottom: 10,
         ),
         decoration: BoxDecoration(
-          border: Border.all(width: 1.5, color: Colors.red),
-          borderRadius: const BorderRadius.all(Radius.circular(18)),
+          color: Colors.white.withOpacity(0.8),
+          border: Border.all(width: 1.5, color: Color.fromRGBO(81,85,126, 1)),
+          borderRadius: const BorderRadius.all(Radius.circular(40)),
         ),
+
+
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -435,22 +466,26 @@ class _showResState extends State<showRes>{
               child: ListTile(
                 title: Text(
                   toDoText,
-                  style: const TextStyle(fontSize: 18),
+                  style: const TextStyle(fontSize: 15),
                 ),
                 onTap: () => null,
               ),
             ),
+
             FlatButton(
+              minWidth: 10,
               child: const Text(
                 'Edit',
-                style: TextStyle(color: Colors.red, fontSize: 14),
+                style: TextStyle(color: Colors.deepPurple, fontSize: 14),
               ),
               onPressed: () => _editDialog(context, index),
             ),
+
             FlatButton(
+              minWidth: 10,
               child: const Text(
                 'Delete',
-                style: TextStyle(color: Colors.red, fontSize: 14),
+                style: TextStyle(color: Colors.deepOrange, fontSize: 14),
               ),
               onPressed: () => _removeTodoItem(index),
             ),
@@ -484,163 +519,158 @@ class _showResState extends State<showRes>{
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      body: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
+      body: Container(
+        constraints: BoxConstraints.expand(),
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/images/ingrbg.png'),
+                fit: BoxFit.cover,
+                colorFilter: ColorFilter.mode(Colors.black54, BlendMode.darken)
+            )
+        ),
+        child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
 
-              //TODO IMAGE CONTAINER
-              Padding(
-                padding: const EdgeInsets.only(
-                    top:40.0,
-                    bottom: 30.0
-                ),
-                child: Center(
-                  child: Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black26,
-                          )
-                      ),
-                      width: 350,
-                      height: 300,
-                      child: Image.file(_imageFile),
+                //////////////////////////////////////////////////////////////////TODO CROPPED IMAGE CONTAINER
+
+                Padding(
+                  padding: const EdgeInsets.only(
+                      top: 40.0,
+                      bottom: 20.0
                   ),
-                ),
-              ),
-
-              //TODO EXTRACT/CHECK INGREDIENT BUTTON
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    height: 45,
-                    width: 150,
-                    decoration: BoxDecoration(
-                        color: Colors.blue, borderRadius: BorderRadius.circular(10)),
-                    child: TextButton(
-                      onPressed: () {
-                        _onRecogniseTap();
-                      },
-                      child: const Text('Extract Ingredient',
-                        style: TextStyle(color: Colors.white, fontSize: 15),
-                      ),
+                  child: Center(
+                    child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.8),
+                            border: Border.all(
+                              color: Colors.black26,
+                            )
+                        ),
+                        width: 350,
+                        height: 200,
+                        child: Image.file(_imageFile),
                     ),
                   ),
+                ),
 
-                  const SizedBox(
-                    width: 20,
+                //////////////////////////////////////////////////////////////////TODO EXTRACT INGREDIENT BUTTON
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: 45,
+                      width: 150,
+                      decoration: BoxDecoration(
+                          color: Color.fromRGBO(214,213,168, 1), borderRadius: BorderRadius.circular(20)),
+                      child: TextButton(
+                        onPressed: () {
+                          _onRecogniseTap();
+                        },
+                        child: const Text('EXTRACT',
+                          style: TextStyle(color: Colors.black, fontSize: 15),
+                        ),
+
+                      ),
+                    ),
+
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    /*
+                    Container(
+                      height: 45,
+                      width: 150,
+                      decoration: BoxDecoration(
+                          color: Color.fromRGBO(214,213,168, 1), borderRadius: BorderRadius.circular(20)),
+                      child: TextButton(
+                        onPressed: () {
+                          checkIngr();
+                          //print(_toDoItems.toString());
+                        },
+                        child: const Text('CHECK',
+                          style: TextStyle(color: Colors.black, fontSize: 15),
+                        ),
+                      ),
+                    ),
+                     */
+                  ],
+                ),
+
+                //////////////////////////////////////////////////////////////////TODO TEXT INSTRUCTION
+
+                const SizedBox(
+                  height: 20,
+                )
+
+        ,
+                const Text('1. Extract the list of ingredients.',
+                  style: TextStyle(color: Colors.white, fontSize: 15),
+                ),
+                const Text('2. Edit or delete any mistakes on the',
+                  style: TextStyle(color: Colors.white, fontSize: 15),
+                ),
+                const Text('list of ingredients extracted.',
+                  style: TextStyle(color: Colors.white, fontSize: 15),
+                ),
+                const Text('3. Check the ingredients.',
+                  style: TextStyle(color: Colors.white, fontSize: 15),
+                ),
+
+
+                //////////////////////////////////////////////////////////////////TODO BUILD LIST
+
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Container(
+                      height: 400,
+                      child: _buildToDoList()),
+                ),
+
+                //////////////////////////////////////////////////////////////////TODO CHECK INGREDIENT BUTTON
+
+                Padding(
+                  padding: const EdgeInsets.only(
+                      top: 5.0, bottom: 30.0
                   ),
-
-                  Container(
+                  child: Container(
                     height: 45,
                     width: 150,
                     decoration: BoxDecoration(
-                        color: Colors.blue, borderRadius: BorderRadius.circular(10)),
+                        color: Color.fromRGBO(214,213,168, 1), borderRadius: BorderRadius.circular(20)),
                     child: TextButton(
                       onPressed: () {
+                        //CircularProgressIndicator();
                         checkIngr();
                         //print(_toDoItems.toString());
                       },
-                      child: const Text('Check Ingredient',
-                        style: TextStyle(color: Colors.white, fontSize: 15),
+                      child: const Text('CHECK',
+                        style: TextStyle(color: Colors.black, fontSize: 15),
                       ),
                     ),
                   ),
-
-                ],
-              ),
-
-              //TODO LIST OF INGREDIENT TEXT/EDIT BUTTON
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: const [
-                  Padding(
-                    padding: EdgeInsets.only(
-                        top:1.0,
-                        left: 20.0
-                    ),
-                    child: Text('List of Ingredients',
-                      style: TextStyle(color: Colors.black, fontSize: 20),
-                    ),
-                  ),
-                ],
-              ),
-
-              /*
-              //TODO TEXT FIELD
-              Padding(
-                padding: const EdgeInsets.only(
-                    left: 20.0,
-                    right: 20.0
                 ),
-                child: Center(
-                  child:
-                  TextField(
-                    controller: _arrayCtrl,
-                    decoration: const InputDecoration(
-                        hintText: "Recognised results would be displayed here..."
-                    ),
-                    minLines: 10,
-                    maxLines: 1000,
-                    enabled: false,
-                  ),
-                ),
-              ),
-
-               */
-
-              //TODO BUILD LIST
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Container(
-                    height: 500,
-                    child: _buildToDoList()),
-              ),
-            ],
-          ),
+              ],
+            ),
+        ),
       ),
     );
   }
-/*
-  Widget _editTextField() {
-    if (_isEditingText) {
-      return Center(
-        child: TextField(
-          onSubmitted: (newValue){
-            setState(() {
-              initialText = newValue;
-              _isEditingText = false;
-            });
-          },
-          autofocus: true,
-          controller: _editText,
-        ),
-      );
-    }
-    return InkWell(
-      onTap: () {
-        setState(() {
-          _isEditingText = true;
-        });
-      },
-    child: Text(initialText,
-      style: TextStyle(
-        color: Colors.black,
-        fontSize: 18.0,
-      ),
-    ));
-  }
 
- */
+
+////////////////////////////////////////////////////////////////////////////////TODO CHECK INGR FUNCTION -> SERVER
 
   Future<void> checkIngr() async {
+
+    //_toDoItems = finalized list of ingredients after edit
 
     String ing = _toDoItems.toString();
     print(ing);
     String _2space = ing.replaceAll('  ', '');
-    String _1space = _2space.replaceAll(' ', '');
-    String _brackl = _1space.replaceAll('{', '');
+    //String _1space = _2space.replaceAll(' ', '');
+    String _brackl = _2space.replaceAll('{', '');
     String _brackr = _brackl.replaceAll('}', '');
     String _sqbrackl = _brackr.replaceAll('[', '');
     String _sqbrackr = _sqbrackl.replaceAll(']', '');
@@ -649,6 +679,7 @@ class _showResState extends State<showRes>{
     String _finalized = _2dots.replaceAll('"', '');
     print(_finalized);
     String Url = "https://amirahnadzri.pythonanywhere.com/check/" + _finalized;
+    //String Url = "https://amirahnadzri.pythonanywhere.com/check/" + 'ham';
     var checked = await http.get(Uri.parse(Url));
 
     if (checked.statusCode == 200) {
@@ -660,6 +691,8 @@ class _showResState extends State<showRes>{
     }
   }
 
+////////////////////////////////////////////////////////////////////////////////TODO EXTRACT INGR FROM PRODUCT
+  //TODO CREATE EDITABLE LIST OF INGR -> FINALIZED
 
   Future<void> _onRecogniseTap() async {
     String _result = await SimpleOcrPlugin.performOCR(_croppedImage.path);
@@ -675,7 +708,6 @@ class _showResState extends State<showRes>{
     String _nosymboltxt = _nopartxt.replaceAll('(', '\n');
     String _parsedtxt = _nosymboltxt.replaceAll(',', '\n');
     String _finaltxt = _parsedtxt.replaceAll(': ', '\n');
-    //String test = ingr.split("\n");
 
     parsedingr = _finaltxt.split('\n');
     //_ingrlist = parsedingr.toList();
@@ -699,83 +731,6 @@ class _showResState extends State<showRes>{
   }
 }
 /*
-class MyListTile extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    Scrollbar(
-      child: ListView.builder(
-        itemBuilder:(context, index) {
-          return Material(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  ListTile(
-                    title: Text(ingr[index]),
-                  ),
-                  Divider(
-                    height: 1,
-                  )
-                ],
-              )
-          );
-        },
-        itemCount: ingr.length,
-      ),
-      isAlwaysShown: true,
-    );
-  }
-}
-*/
-
-/*
-class MyListView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-        itemCount: _ingrlist.length,
-        itemBuilder: (context, index) => EditableListTile(
-          model: _ingrlist[index],
-          onChanged: (ListModel updatedModel) {
-            _ingrlist[index] = updatedModel;
-            },
-        ));
-  }
-}
-
- */
-
-/*
-class AfterScanNav extends StatelessWidget{
-  const AfterScanNav({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text(
-            'Scan History'
-        ),
-      ),
-    );
-  }
-}
-
-// TODO HISTORY LIST
-class HistoryNav extends StatelessWidget{
-  const HistoryNav({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text(
-            'Scan History'
-        ),
-      ),
-    );
-  }
-}
-
 // TODO PROFILE
 class ProfileNav extends StatelessWidget{
   const ProfileNav({Key key}) : super(key: key);
@@ -791,4 +746,6 @@ class ProfileNav extends StatelessWidget{
     );
   }
 }
-*/
+ */
+
+

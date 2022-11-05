@@ -69,6 +69,11 @@ flutter:
      - assets/images/yoshi.png
      - assets/images/bg.png
      - assets/images/title.png
+     - assets/images/logo.png
+     - assets/images/signupbg.png
+     - assets/images/signuptext.png
+     - assets/images/homepagebg.png
+     - assets/images/ingrbg.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

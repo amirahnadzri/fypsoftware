@@ -30,16 +30,17 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
-//TODO LOGIN PAGE
+////////////////////////////////////////////////////////////////////////////////TODO LOGIN PAGE
+
 class _LoginPageState extends State<LoginPage> {
 
   var emailcontroller = TextEditingController();
   var pwcontroller = TextEditingController();
+  var value;
 
   bool isApiCallProcess = false;
   Users loginRequestModel;
   final scaffoldKey = GlobalKey<ScaffoldState>();
-
   final formKey = GlobalKey<FormState>();
 
   Future<void> login() async {
@@ -68,9 +69,6 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  var value;
-
-
   @override
   void initState() {
     super.initState();
@@ -79,7 +77,9 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
+        constraints: BoxConstraints.expand(),
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/images/bg.png'),
@@ -92,7 +92,8 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
 
-              //TODO APP LOGO OR IMAGE
+              //////////////////////////////////////////////////////////////////TODO APP LOGO OR IMAGE
+
               Padding(
                 padding: const EdgeInsets.only(
                     top:40.0,
@@ -100,44 +101,22 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 child: Center(
                   child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.black26,
-                      )
-                    ),
-                      width: 300,
-                      height: 300,
-                      child: Image.asset('assets/images/title.png')
+                    width: 300,
+                    height: 300,
+                    child: Image.asset('assets/images/title.png')
                   ),
                 ),
               ),
 
-              /*
-              //TODO LOGIN TEXT
-              const Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: Center(
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text('Login',
-                        style: TextStyle(
-                            color: Colors.blue,
-                            fontSize: 30),
-                        textAlign: TextAlign.right,
-                    ),
-                  ),
-                ),
-              ),
-               */
+              //////////////////////////////////////////////////////////////////TODO USERNAME INPUT BOX
 
-              //TODO USERNAME INPUT BOX
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: Container(
                     height: 60,
                     width: 320,
                     decoration: BoxDecoration(
-                      color: Colors.grey[500].withOpacity(0.5),
+                      color: Colors.white.withOpacity(0.8),
                       borderRadius: BorderRadius.circular(16),
                     ),
                   child: Center(
@@ -147,26 +126,27 @@ class _LoginPageState extends State<LoginPage> {
                           border: InputBorder.none,
                           prefixIcon: Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                            child: Icon(Icons.person, color: Colors.white),
+                            child: Icon(Icons.person, color: Colors.black),
                           ),
                           labelText: 'Username',
-                          labelStyle: TextStyle(fontSize: 20, color: Colors.white),
+                          labelStyle: TextStyle(fontSize: 20, color: Colors.black),
                           hintText: 'Enter username',
-                          hintStyle: TextStyle(fontSize: 20, color: Colors.white)
+                          hintStyle: TextStyle(fontSize: 20, color: Colors.black)
                       ),
                     ),
                   ),
                 ),
               ),
 
-              //TODO PASSWORD INPUT BOX
+              //////////////////////////////////////////////////////////////////TODO PASSWORD INPUT BOX
+
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                   child: Container(
                     height: 60,
                     width: 320,
                   decoration: BoxDecoration(
-                    color: Colors.grey[500].withOpacity(0.5),
+                    color: Colors.white.withOpacity(0.8),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Center(
@@ -177,19 +157,20 @@ class _LoginPageState extends State<LoginPage> {
                         border: InputBorder.none,
                         prefixIcon: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                          child: Icon(Icons.lock, color: Colors.white),
+                          child: Icon(Icons.lock, color: Colors.black),
                         ),
                         labelText: 'Password',
-                        labelStyle: TextStyle(fontSize: 20, color: Colors.white),
+                        labelStyle: TextStyle(fontSize: 20, color: Colors.black),
                         hintText: 'Enter your password',
-                        hintStyle: TextStyle(fontSize: 20, color: Colors.white),
+                        hintStyle: TextStyle(fontSize: 20, color: Colors.black),
                       ),
                     ),
                   ),
                 ),
               ),
 
-              //TODO FORGOT PASSWORD
+              //////////////////////////////////////////////////////////////////TODO FORGOT PASSWORD
+
               const Padding(
                 padding: EdgeInsets.only(
                     right: 30.0,
@@ -208,7 +189,8 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
 
-              //TODO LOGIN BUTTON
+              //////////////////////////////////////////////////////////////////TODO LOGIN BUTTON
+
               Container(
                 height: 50,
                 width: 270,
@@ -227,12 +209,13 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(
                 height: 5,
               ),
-              const Text('or'),
+              const Text('or', style: TextStyle(color: Colors.white)),
               const SizedBox(
                 height: 5,
               ),
 
-              //TODO CONTINUE AS GUEST
+              //////////////////////////////////////////////////////////////////TODO CONTINUE AS GUEST
+
               Container(
                 height: 50,
                 width: 270,
@@ -253,7 +236,8 @@ class _LoginPageState extends State<LoginPage> {
                 height: 20,
               ),
 
-              //TODO NEW USER? SIGN UP
+              //////////////////////////////////////////////////////////////////TODO NEW USER? SIGN UP
+
               Column(
                 children: [
                   Row(
@@ -271,7 +255,6 @@ class _LoginPageState extends State<LoginPage> {
                             },
                           child:
                             const Text('Sign Up',
-                              style: TextStyle(color: Color.fromRGBO(214,213,168, 1)),
                             ),
                       ),
                     ],
@@ -285,7 +268,8 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  // TODO DEMO GIF/VIDEO POP-UP
+////////////////////////////////////////////////////////////////////////////////TODO DEMO GIF/VIDEO POP-UP
+
   void showAlert(BuildContext context) {
     showDialog(
       context: context,
@@ -307,7 +291,8 @@ class RegPage extends StatefulWidget {
   _RegPageState createState() => _RegPageState();
 }
 
-//TODO REGISTER SIGN UP PAGE
+/////////////////////////////////////////////////////////////////////////////////TODO REGISTER SIGN UP PAGE
+
 class _RegPageState extends State<RegPage> {
 
   var su_emailctrl = TextEditingController();
@@ -357,117 +342,159 @@ class _RegPageState extends State<RegPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
+      resizeToAvoidBottomInset: false,
+      body: Container(
+        constraints: BoxConstraints.expand(),
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage('assets/images/signupbg.png'),
+              fit: BoxFit.cover
+          )
+        ),
+        child: SingleChildScrollView(
+          child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
 
-            //TODO APP LOGO OR IMAGE
+            ////////////////////////////////////////////////////////////////////TODO SIGNUP TEXT IMAGE
+
             Padding(
               padding: const EdgeInsets.only(
-                  top:30.0,
+                  top:40.0,
                   bottom: 10.0
               ),
               child: Center(
                 child: Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black26,
-                        )
-                    ),
-                    width: 150,
+                    width: 300,
                     height: 100,
-                    child: Image.asset('assets/images/yoshi.png')
+                    child: Image.asset('assets/images/signuptext.png')
                 ),
               ),
             ),
 
-            //TODO SIGNUP TEXT
-            const Padding(
-              padding: EdgeInsets.only(
-                  left: 20.0,
-                  bottom: 10.0
-              ),
-              child: Center(
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text('Sign Up',
-                    style: TextStyle(
-                        color: Colors.blue,
-                        fontSize: 30),
-                    textAlign: TextAlign.right,
-                  ),
-                ),
-              ),
-            ),
+            ////////////////////////////////////////////////////////////////////TODO INPUT TEXT DETAILS
 
             Padding(
                 padding: const EdgeInsets.only(
                     left: 30.0,
                     right: 40.0,
-                    bottom: 10.0
+                    bottom: 40.0
                 ),
                 child: Column(
                   children: <Widget>[
                     TextFormField(
                       controller: su_emailctrl,
-                      decoration: const InputDecoration(
-                          icon: const Icon(Icons.email),
-                          labelText: 'Email',
-                          hintText: 'Enter a valid email address'),
+                      decoration: InputDecoration(
+                        fillColor: Colors.white.withOpacity(0.8),
+                        filled: true,
+                        isDense: true,
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(width: 1, color: Colors.deepPurpleAccent),
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                        icon: Icon(Icons.email, color: Colors.white),
+                        hintText: 'Enter a valid email address',
+                        hintStyle: TextStyle(fontSize: 17, color: Colors.black)
+                      ),
                     ),
+                    SizedBox(height: 16,),
                     TextFormField(
                       controller: su_usernamectrl,
-                      decoration: const InputDecoration(
-                          icon: const Icon(Icons.person),
-                          labelText: 'Username',
-                          hintText: 'Enter your password'),
+                      decoration: InputDecoration(
+                        fillColor: Colors.white.withOpacity(0.8),
+                        filled: true,
+                        isDense: true,
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(width: 1, color: Colors.deepPurpleAccent),
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                        icon: Icon(Icons.person, color: Colors.white),
+                        hintText: 'Enter username',
+                        hintStyle: TextStyle(fontSize: 17, color: Colors.black)
+                      ),
                     ),
+                    SizedBox(height: 16,),
                     TextFormField(
                       controller: su_fnctrl,
-                      decoration: const InputDecoration(
-                          icon: const Icon(Icons.person),
-                          labelText: 'First Name',
-                          hintText: 'Enter your password'),
+                      decoration: InputDecoration(
+                          fillColor: Colors.white.withOpacity(0.8),
+                          filled: true,
+                          isDense: true,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(width: 1, color: Colors.deepPurpleAccent),
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          icon: Icon(Icons.person, color: Colors.white),
+                          hintText: 'Enter your first name',
+                          hintStyle: TextStyle(fontSize: 17, color: Colors.black)
+                      ),
                     ),
+                    SizedBox(height: 16,),
                     TextFormField(
                       controller: su_lnctrl,
-                      decoration: const InputDecoration(
-                          icon: const Icon(Icons.person),
-                          labelText: 'Last Name',
-                          hintText: 'Enter your password'),
+                      decoration: InputDecoration(
+                          fillColor: Colors.white.withOpacity(0.8),
+                          filled: true,
+                          isDense: true,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(width: 1, color: Colors.deepPurpleAccent),
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          icon: Icon(Icons.person, color: Colors.white),
+                          hintText: 'Enter your last name',
+                          hintStyle: TextStyle(fontSize: 17, color: Colors.black)
+                      ),
                     ),
+                    SizedBox(height: 16,),
                     TextFormField(
                       controller: su_pwctrl,
-                      decoration: const InputDecoration(
-                          icon: Icon(Icons.lock),
-                          labelText: 'Password',
-                          hintText: 'Enter your password'),
+                      obscureText: true,
+                      decoration: InputDecoration(
+                          fillColor: Colors.white.withOpacity(0.8),
+                          filled: true,
+                          isDense: true,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(width: 1, color: Colors.deepPurpleAccent),
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          icon: Icon(Icons.lock, color: Colors.white),
+                          hintText: 'Enter your password',
+                          hintStyle: TextStyle(fontSize: 17, color: Colors.black)
+                      ),
                     ),
+                    SizedBox(height: 16,),
                     TextFormField(
                       controller: su_repwctrl,
-                      decoration: const InputDecoration(
-                          icon: const Icon(Icons.lock),
-                          labelText: 'Re-enter Password',
-                          hintText: 'Enter your password'),
+                      obscureText: true,
+                      decoration: InputDecoration(
+                          fillColor: Colors.white.withOpacity(0.8),
+                          filled: true,
+                          isDense: true,
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide(width: 1, color: Colors.deepPurpleAccent),
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          icon: Icon(Icons.lock, color: Colors.white),
+                          hintText: 'Re-enter your password',
+                          hintStyle: TextStyle(fontSize: 17, color: Colors.black)
+                      ),
                     ),
                   ],
                 )
             ),
 
-            //TODO SIGN UP BUTTON
+            ////////////////////////////////////////////////////////////////////TODO SIGN UP BUTTON
             Container(
               height: 50,
-              width: 320,
+              width: 270,
               decoration: BoxDecoration(
-                  color: Colors.blue, borderRadius: BorderRadius.circular(10)),
-              child: TextButton(
-                onPressed: () {
+                  color: Color.fromRGBO(81,85,126, 1), borderRadius: BorderRadius.circular(40)),
+              child: FlatButton(
+                onPressed: (){
                   signup();
-                  //Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage()));
                 },
-                child: const Text('CREATE ACCOUNT',
-                  style: TextStyle(color: Colors.white, fontSize: 20),
+                child: const Text('Create Account',
+                  style: TextStyle(color: Colors.white, fontSize: 25),
                 ),
               ),
             ),
@@ -475,24 +502,24 @@ class _RegPageState extends State<RegPage> {
             const SizedBox(
               height: 5,
             ),
-            const Text('or'),
+            const Text('or', style: TextStyle(color: Colors.white)),
             const SizedBox(
               height: 5,
             ),
 
-            //TODO CONTINUE AS GUEST
+            ////////////////////////////////////////////////////////////////////TODO CONTINUE AS GUEST
             Container(
               height: 50,
-              width: 320,
+              width: 270,
               decoration: BoxDecoration(
-                  color: Colors.grey, borderRadius: BorderRadius.circular(10)),
+                  color: Color.fromRGBO(214,213,168, 1), borderRadius: BorderRadius.circular(40)),
               child: TextButton(
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (_) => const HomePage()));
                   Future.delayed(Duration.zero, () => showAlert(context));
                 },
                 child: const Text('Continue as Guest',
-                  style: TextStyle(color: Colors.white, fontSize: 20),
+                  style: TextStyle(color: Colors.black, fontSize: 25),
                 ),
               ),
             ),
@@ -501,13 +528,15 @@ class _RegPageState extends State<RegPage> {
               height: 0,
             ),
 
-            //TODO NEW USER? SIGN UP
+            ////////////////////////////////////////////////////////////////////TODO NEW USER? SIGN UP
+
             Column(
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text('Already have an account?'),
+                    const Text('Already have an account?',
+                      style: TextStyle(color: Colors.white),),
                     TextButton(
                         onPressed: () {
                           Navigator.pop(
@@ -523,9 +552,10 @@ class _RegPageState extends State<RegPage> {
           ],
         ),
       ),
+      ),
     );
   }
-  // TODO DEMO GIF/VIDEO POP-UP
+  //////////////////////////////////////////////////////////////////////////////TODO DEMO GIF/VIDEO POP-UP
   void showAlert(BuildContext context) {
     showDialog(
         context: context,
