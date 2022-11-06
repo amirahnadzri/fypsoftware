@@ -488,7 +488,8 @@ class _RegPageState extends State<RegPage> {
               height: 50,
               width: 270,
               decoration: BoxDecoration(
-                  color: Color.fromRGBO(81,85,126, 1), borderRadius: BorderRadius.circular(40)),
+                  color: Color.fromRGBO(81,85,126, 1),
+                  borderRadius: BorderRadius.circular(40)),
               child: FlatButton(
                 onPressed: (){
                   signup();
