@@ -1,5 +1,6 @@
 // @dart=2.9
 import 'dart:convert';
+import 'dart:ui';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'package:appmaindesign/model.dart';
@@ -7,8 +8,10 @@ import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:simple_ocr_plugin/simple_ocr_plugin.dart';
+import 'package:appmaindesign/model/Profile_widget.dart';
+import 'package:appmaindesign/model/userprofile.dart';
+import 'package:appmaindesign/model/userpref.dart';
 
-import 'package:appmaindesign/listwidget.dart';
 
 var parsedingr;
 ListModel test;
@@ -23,7 +26,8 @@ TextEditingController _arrayCtrl = TextEditingController();
 TextEditingController _editText = TextEditingController();
 TextEditingController _controller = TextEditingController();
 TextEditingController _controller1 = TextEditingController();
-
+enum DietGroup { vegan, lacto, none, ovo, pesco, pollo, lactoovo }
+final users = UserPreferences().MyUsers;
 
 class HomePage extends StatefulWidget{
   const HomePage({Key key}) : super(key: key);
@@ -32,14 +36,15 @@ class HomePage extends StatefulWidget{
 }
 
 ////////////////////////////////////////////////////////////////////////////////TODO BOTTOM NAVIGATION BAR
+
 class _HomePageState extends State<HomePage>{
 
-  int _currentIndex =0;
+  int _currentIndex = 0;
 
   static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static final List<Widget> _widgetOptions = <Widget>[
     const ScanNav(),
-    //ProfileNav(),
+    const ProfileNav(),
   ];
 
   @override
@@ -89,34 +94,9 @@ class ScanNav extends StatefulWidget{
   State<ScanNav> createState() => _ScanNavState();
 }
 
-/*
-class ScanNav extends StatelessWidget{
-  const ScanNav({Key key}) : super(key: key);
-
-  @override
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children:[
-            Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(50),
-                  child: _scanNav(),
-              )
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}
-*/
-
 
 ////////////////////////////////////////////////////////////////////////////////TODO SCAN IMAGE FEATURE
+
 class _ScanNavState extends State<ScanNav> {
 
   @override
@@ -142,56 +122,12 @@ class _ScanNavState extends State<ScanNav> {
             ],
           ),
 
-        /*
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (_indexnav == 0) ...[
-              pickImg(),
-            ] else if(_indexnav == 1)...[
-              showRes(),
-            ],
-          ],
-        ),
-        */
 
         ),
       ),
     );
   }
 }
-
-
-/*
-  //TODO OPEN CAMERA AND TAKE PHOTO FUNCTION
-  Future<void> _TakePhoto(BuildContext c) async {
-    _pickedFile = await ImagePicker().getImage(
-        source: ImageSource.camera
-    );
-    _cropImage(_pickedFile.path);
-  }
-
-  //TODO CHOOSE FROM GALLERY FUNCTION
-  Future<void> _ChooseGallery(BuildContext c) async {
-    _pickedFile = await ImagePicker().getImage(
-        source: ImageSource.gallery
-    );
-    _cropImage(_pickedFile.path);
-  }
-
-  //TODO CROP IMAGE FUNCTION
-  Future<void> _cropImage(filepath) async {
-    _croppedImage = await ImageCropper().cropImage(
-        sourcePath: filepath,
-        maxHeight: 1080,
-        maxWidth: 1080
-    );
-    setState(() {
-      _imageFile = File(_croppedImage.path);
-    });
-  }
-}
-*/
 
 class pickImg extends StatefulWidget {
   @override
@@ -326,18 +262,7 @@ class ToDoElement {
 
 class _showResState extends State<showRes>{
 
-  @override
-  void initState() {
-    super.initState();
-
-    /*
-    _editText = TextEditingController();
-    for (String ingr in _ingrlist){
-      print(ingr);
-    }
-     */
-  }
-
+  //////////////////////////////////////////////////////////////////////////////TODO LIST OF INGR FUNCTIONS
   @override
   void dispose() {
     _editText.dispose();
@@ -495,8 +420,7 @@ class _showResState extends State<showRes>{
     );
   }
 
-  int compareElement(ToDoElement a, ToDoElement b) =>
-      a.timeOfCreation.isAfter(b.timeOfCreation) ? -1 : 1;
+  int compareElement(ToDoElement a, ToDoElement b) => a.timeOfCreation.isAfter(b.timeOfCreation) ? -1 : 1;
 
   Widget _buildToDoList() {
     _toDoItems.sort(compareElement);
@@ -515,6 +439,8 @@ class _showResState extends State<showRes>{
       ],
     );
   }
+
+  //////////////////////////////////////////////////////////////////////////////TODO EXTRACTING LIST OF INGR PAGE
 
   @override
   Widget build(BuildContext context){
@@ -730,22 +656,263 @@ class _showResState extends State<showRes>{
     });
   }
 }
-/*
-// TODO PROFILE
-class ProfileNav extends StatelessWidget{
+
+////////////////////////////////////////////////////////////////////////////////TODO PROFILE PAGE FEATURE
+
+class ProfileNav extends StatefulWidget{
   const ProfileNav({Key key}) : super(key: key);
 
   @override
+  State<ProfileNav> createState() => _ProfileNavState();
+}
+
+class _ProfileNavState extends State<ProfileNav> {
+
+  @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text(
-            'Profile'
+    return Scaffold(
+      body: Container(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                height: 800,
+                child: myProfile(),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 }
- */
 
+class myProfile extends StatefulWidget {
+  @override
+  _myProfileState createState() => _myProfileState();
+}
 
+class _myProfileState extends State<myProfile>{
+
+  DietGroup _site = DietGroup.none;
+  @override
+  Widget build(BuildContext context){
+    return Scaffold(
+      body: Container(
+          constraints: BoxConstraints.expand(),
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage('assets/images/profile_bg.png'),
+                  fit: BoxFit.cover,
+              )
+          ),
+          child: Column(
+            children: [
+
+              //////////////////////////////////////////////////////////////////TODO PROFILE PICTURE
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 100,
+                  bottom: 20
+                ),
+                child: ProfileWidget(
+                  imagePath: users.imagePath,
+                  onClicked: () async {},
+                ),
+              ),
+
+              //Profile(2),
+
+              const SizedBox(
+                height: 20,
+              ),
+
+              //////////////////////////////////////////////////////////////////TODO CHOOSE DIET PREF TEXT
+
+              const Text("Choose your diet preference.",
+                style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+
+              const SizedBox(
+                height: 15,
+              ),
+
+              //////////////////////////////////////////////////////////////////TODO PREFERENCE RADIO BUTTONS
+
+              Container(
+                padding: const EdgeInsets.only(
+                  top: 15,
+                  bottom: 15,
+                ),
+                width: 250,
+                decoration: BoxDecoration(
+                  color: Color.fromRGBO(81,85,126, 1),
+                  borderRadius: BorderRadius.circular(40)
+                ),
+                child: Column(
+                  children: <Widget>[
+                    ListTile(
+                      title: const Text('No Preference',
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                      ),
+                      dense: true,
+                      visualDensity: VisualDensity(vertical: -4),
+                      leading: Radio(
+                        value: DietGroup.none,
+                        groupValue: _site,
+                        onChanged: (DietGroup value) {
+                          setState(() {
+                            _site = value;
+                          });
+                        },
+                      ),
+                    ),
+
+                    ListTile(
+                      title: const Text('Vegan',
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                      ),
+                      dense: true,
+                      visualDensity: VisualDensity(vertical: -4),
+                      leading: Radio(
+                        value: DietGroup.vegan,
+                        groupValue: _site,
+                        onChanged: (DietGroup value) {
+                          setState(() {
+                            _site = value;
+                          });
+                        },
+                      ),
+                    ),
+
+                    ListTile(
+
+                      title: const Text('Lactose Intolerant',
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                      ),
+                      dense: true,
+                      visualDensity: VisualDensity(vertical: -4),
+                      leading: Radio(
+                        value: DietGroup.lacto,
+                        groupValue: _site,
+                        onChanged: (DietGroup value) {
+                          setState(() {
+                            _site = value;
+                          });
+                        },
+                      ),
+                    ),
+
+                    ListTile(
+                      title: const Text('Egg Intolerance',
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                      ),
+                      dense: true,
+                      visualDensity: VisualDensity(vertical: -4),
+                      leading: Radio(
+                        value: DietGroup.ovo,
+                        groupValue: _site,
+                        onChanged: (DietGroup value) {
+                          setState(() {
+                            _site = value;
+                          });
+                        },
+                      ),
+                    ),
+
+                    ListTile(
+                      title: const Text('Pescatarian',
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                      ),
+                      dense: true,
+                      visualDensity: VisualDensity(vertical: -4),
+                      leading: Radio(
+                        value: DietGroup.pesco,
+                        groupValue: _site,
+                        onChanged: (DietGroup value) {
+                          setState(() {
+                            _site = value;
+                          });
+                        },
+                      ),
+                    ),
+
+                    ListTile(
+                      title: const Text('Pollotarian',
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                      ),
+                      dense: true,
+                      visualDensity: VisualDensity(vertical: -4),
+                      leading: Radio(
+                        value: DietGroup.pollo,
+                        groupValue: _site,
+                        onChanged: (DietGroup value) {
+                          setState(() {
+                            _site = value;
+                          });
+                        },
+                      ),
+                    ),
+
+                    ListTile(
+                      title: const Text('Lacto-ovo Vegetarian',
+                        style: TextStyle(color: Colors.white, fontSize: 15),
+                      ),
+                      dense: true,
+                      visualDensity: VisualDensity(vertical: -4),
+                      leading: Radio(
+                        value: DietGroup.lactoovo,
+                        groupValue: _site,
+                        onChanged: (DietGroup value) {
+                          setState(() {
+                            _site = value;
+                          });
+                        },
+                      ),
+                    ),
+
+                  ],
+                ),
+              ),
+            ],
+          )
+      ),
+    );
+  }
+}
+
+Future<void> Profile(int i) async {
+
+  if(i == 1){
+    buildName(users);
+  }
+  else{
+    buildNoProfile();
+  }
+}
+
+Widget buildName(Users user) => Column(
+  children: [
+    const Text("Welcome"),
+    Text(
+      user.username,
+      style: TextStyle(color: Colors.white ,fontWeight: FontWeight.bold, fontSize: 24),
+    ),
+    const SizedBox(height: 4),
+    Text(
+      user.email,
+      style: TextStyle(color: Colors.grey),
+    )
+  ],
+);
+
+Widget buildNoProfile() => Column(
+  children: const [
+    Text("Welcome, user!"),
+    Text(
+      'You are not logged in.',
+      style: TextStyle(color: Colors.white ,fontWeight: FontWeight.bold, fontSize: 24),
+    ),
+  ],
+);
