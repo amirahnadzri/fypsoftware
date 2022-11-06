@@ -74,6 +74,7 @@ flutter:
      - assets/images/signuptext.png
      - assets/images/homepagebg.png
      - assets/images/ingrbg.png
+     - assets/images/profile_bg.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
