@@ -108,6 +108,7 @@ def final_category(category_list):
       count = 0
       
       category_list = [each_string.lower() for each_string in category_list]
+      category_list.reverse()
       for find in to_find:
         str_match = list(filter(lambda x: find in x, category_list))
         if str_match:
@@ -122,7 +123,7 @@ def final_category(category_list):
 def main(ingredient):
   test = ingredient.split(" ")
   ingredient = ingredient.replace(" ","+")
-  trigger = [ "corn", "seed", "beans", "peas", "soy", "wine","coconut","cream"]
+  trigger = [ "corn", "seed", "beans", "peas", "soy", "wine","coconut","cream","rice"]
   test = [each_string.lower() for each_string in test]
   if final_category(test) == "not in category" or final_category(test) == "nut":
     count2 = 0
@@ -131,15 +132,17 @@ def main(ingredient):
       if str_match:
         break
       count2 = count2 + 1
-      if count2 == 7:
+      if count2 == 9:
         break
-    if count2 < 7:
+    if count2 < 9:
       if (trigger[count2] == "corn") or (trigger[count2] == "coconut") or (trigger[count2] == "seed") or (trigger[count2] == "corn") or (trigger[count2] == "peas") or (trigger[count2] == "beans") or (trigger[count2] == "soy"):
         return "plant"
       elif (trigger[count2] == "cream"):
         return "milk"
       elif (trigger[count2] == "wine"):
         return "alcohol"
+      elif (trigger[count2] == "rice"):
+        return "grain"
   try:
     keyword_id = get_idfromkeyword(ingredient)
   except IndexError:
