@@ -113,7 +113,7 @@ def final_category(category_list):
         if str_match:
           break
         count = count + 1
-      if count == 18:
+      if count == 21:
         return "not in category"
       if to_find[count] == "fruit" or to_find[count] == "vegetable" or to_find[count] == "herb" :
         return to_find[12]
