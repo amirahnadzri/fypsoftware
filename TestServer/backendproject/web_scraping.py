@@ -104,7 +104,7 @@ def get_category_alcohol(keyword_id, keyword, i):
       return res
 
 def final_category(category_list):
-      to_find = [ "beef", "pork", "chicken","egg","nut", "dairy","milk","fish", "seafood","vegetable","fruit", "alcohol", "herb","plant", "animal", "water", "chemical"]
+      to_find = [ "beef", "pork", "chicken","egg","nut", "dairy","milk","fish","grain", "seafood","vegetable","fruit","nut", "dairy","milk", "alcohol", "herb","plant", "animal", "water", "chemical"]
       count = 0
       
       category_list = [each_string.lower() for each_string in category_list]
@@ -113,7 +113,7 @@ def final_category(category_list):
         if str_match:
           break
         count = count + 1
-      if count == 17:
+      if count == 18:
         return "not in category"
       if to_find[count] == "fruit" or to_find[count] == "vegetable" or to_find[count] == "herb" :
         return to_find[12]
