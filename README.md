@@ -13,7 +13,7 @@ This is the Repository for 2022 성균관대학교 Software Final Year Project b
  In this project, we created a mobile application called **Food4U** which will provide a service for users specifically of those who are a part of a group with dietary restrictions or have personal food preferences such as vegans, pescatarians, lacto-ovo vegetarians, etc.
 
   
-  <h2>Current Features</h2>
+<h2>Current Features</h2>
   
     Features that are available are checked, while the ones that are not checked are still in progress.
   
@@ -35,7 +35,7 @@ This is the Repository for 2022 성균관대학교 Software Final Year Project b
 - [ ] User have access to their history of scanned products with results.
 - [ ] Preference options for religious dietary restrictions.
 
-  <h2>Reason for Project</h2>
+<h2>Reason for Project</h2>
 
 The reason we started this project was because we too are a part of the group with dietary restrictions.
   
