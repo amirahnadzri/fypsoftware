@@ -1,6 +1,5 @@
 // @dart=2.9
 import 'dart:convert';
-import 'dart:ui';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'package:appmaindesign/model.dart';
@@ -20,7 +19,9 @@ List<ToDoElement> _toDoItems = [];
 PickedFile _pickedFile;
 File _croppedImage;
 File _imageFile;
+String _cleaningrlist;
 bool _isEditingText = false;
+bool _load = false;
 TextEditingController _resultCtrl = TextEditingController();
 TextEditingController _arrayCtrl = TextEditingController();
 TextEditingController _editText = TextEditingController();
@@ -585,7 +586,6 @@ class _showResState extends State<showRes>{
     );
   }
 
-
 ////////////////////////////////////////////////////////////////////////////////TODO CHECK INGR FUNCTION -> SERVER
 
   Future<void> checkIngr() async {
@@ -604,17 +604,26 @@ class _showResState extends State<showRes>{
     String _2dots = _ingredienttxt.replaceAll(':', '');
     String _finalized = _2dots.replaceAll('"', '');
     print(_finalized);
+
+    _cleaningrlist = _finalized;
+    //_load = true;
+    Navigator.push(context, MaterialPageRoute(builder: (_) => const ResPage()));
+    Future.delayed(Duration.zero, () => showAlert(context));
+    /*
     String Url = "https://amirahnadzri.pythonanywhere.com/check/" + _finalized;
-    //String Url = "https://amirahnadzri.pythonanywhere.com/check/" + 'ham';
     var checked = await http.get(Uri.parse(Url));
+    ResPage();
 
     if (checked.statusCode == 200) {
-      print('dapat connect');
+      print('dapat connect (1)');
       print(checked.body);
+
     } else {
-      print('tak dapat status code 200');
+      print('tak dapat status code 200 (1)');
       print(checked.body);
     }
+    */
+
   }
 
 ////////////////////////////////////////////////////////////////////////////////TODO EXTRACT INGR FROM PRODUCT
@@ -636,9 +645,6 @@ class _showResState extends State<showRes>{
     String _finaltxt = _parsedtxt.replaceAll(': ', '\n');
 
     parsedingr = _finaltxt.split('\n');
-    //_ingrlist = parsedingr.toList();
-    //String test = jsonEncode(_ingrlist);
-    //_ingrlist = test;
 
     for (var ing in parsedingr){
       _addToDoItem(ing);
@@ -647,15 +653,12 @@ class _showResState extends State<showRes>{
     }
 
     setState(() {
-      //list = List<dynamic>.from(ingr);
-      //_arrayCtrl.text = _result;
-
       _resultCtrl.text = _result;
       _arrayCtrl.text = _finaltxt;
-      
     });
   }
 }
+
 
 ////////////////////////////////////////////////////////////////////////////////TODO PROFILE PAGE FEATURE
 
@@ -916,3 +919,97 @@ Widget buildNoProfile() => Column(
     ),
   ],
 );
+
+////////////////////////////////////////////////////////////////////////////////TODO SHOW RESULTS
+
+
+class ResPage extends StatefulWidget{
+  const ResPage({Key key}) : super(key: key);
+
+  @override
+  State<ResPage> createState() => _ResPageState();
+}
+
+class _ResPageState extends State<ResPage> {
+  @override
+  void initState() {
+    _loadingend(context);
+    super.initState();
+  }
+
+  Future _loadingend (BuildContext context) async {
+
+    await Future.delayed(Duration(seconds: 5));
+    print("tengah check");
+    String Url = "https://amirahnadzri.pythonanywhere.com/check/" + _cleaningrlist;
+    var checked = await http.get(Uri.parse(Url));
+    if (checked.statusCode == 200) {
+      print('dapat connect (1)');
+      print(checked.body);
+      Navigator.pop(context);
+
+    } else {
+      print('tak dapat status code 200 (1)');
+      print(checked.body);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        constraints: const BoxConstraints.expand(),
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/images/ingrbg.png'),
+                fit: BoxFit.cover,
+                colorFilter: ColorFilter.mode(Colors.black54, BlendMode.darken)
+            )
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+
+              //////////////////////////////////////////////////////////////////TODO CROPPED IMAGE CONTAINER
+
+              Padding(
+                padding: const EdgeInsets.only(
+                    top: 40.0,
+                    bottom: 20.0
+                ),
+                child: Center(
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.8),
+                        border: Border.all(
+                          color: Colors.black26,
+                        )
+                    ),
+                    width: 350,
+                    height: 200,
+                    child: Image.file(_imageFile),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+  }
+}
+void showAlert(BuildContext context) {
+  showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: Row(
+          children: [
+            CircularProgressIndicator(),
+            Container(margin: EdgeInsets.only(left: 7),child:Text("Loading..." )),
+          ],
+        ),
+      )
+  );
+}
