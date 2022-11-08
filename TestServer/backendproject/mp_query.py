@@ -1,8 +1,6 @@
 from .web_scraping import main
-
 from multiprocessing import Process, Manager
 from time import sleep
-
 
 def query(arg,IniCat):
     result = main(arg)

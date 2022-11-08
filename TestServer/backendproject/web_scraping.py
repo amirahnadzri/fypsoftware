@@ -1,6 +1,5 @@
 import requests
 from bs4 import BeautifulSoup
-import requests
 import sys
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -62,7 +61,7 @@ def get_category(keyword_id, keyword, i):
       wd = webdriver.Chrome('chromedriver',options=options)
       wd.get("https://ontobee.org/ontology/FOODON?iri=http://purl.obolibrary.org/obo/"+keyword_id)
       h1 = wd.find_elements(By.CLASS_NAME, value="hierarchy")
-      
+
       try:
         list1 = h1[0].text
       except IndexError:
@@ -76,7 +75,7 @@ def get_category(keyword_id, keyword, i):
           ele = ele.strip()
           ele = ele.replace("\n","")
           res.append(ele)
-      
+
       wd.quit()
       return res
 
@@ -85,7 +84,7 @@ def get_category_alcohol(keyword_id, keyword, i):
       wd = webdriver.Chrome('chromedriver',options=options)
       wd.get("https://ontobee.org/ontology/NCIT?iri=http://purl.obolibrary.org/obo/"+keyword_id)
       h1 = wd.find_elements(By.CLASS_NAME, value="hierarchy")
-      
+
       try:
         list1 = h1[0].text
       except IndexError:
@@ -99,14 +98,14 @@ def get_category_alcohol(keyword_id, keyword, i):
           ele = ele.strip()
           ele = ele.replace("\n","")
           res.append(ele)
-      
+
       wd.quit()
       return res
 
 def final_category(category_list):
-      to_find = [ "beef", "pork", "chicken","egg","nut", "dairy","milk","fish","grain", "seafood","vegetable","fruit","nut", "dairy","milk", "alcohol", "herb","plant", "animal", "water", "chemical"]
+      to_find = [ "beef", "pork", "chicken","nut", "dairy","egg","milk","fish","grain", "seafood","vegetable","fruit","nut", "dairy","milk", "alcohol", "herb","plant", "animal", "water", "chemical"]
       count = 0
-      
+
       category_list = [each_string.lower() for each_string in category_list]
       category_list.reverse()
       for find in to_find:
@@ -123,7 +122,7 @@ def final_category(category_list):
 def main(ingredient):
   test = ingredient.split(" ")
   ingredient = ingredient.replace(" ","+")
-  trigger = [ "corn", "seed", "beans", "peas", "soy", "wine","coconut","cream","rice"]
+  trigger = [ "corn", "seed", "beans", "peas", "soy", "wine","coconut","cream","rice","yogurt"]
   test = [each_string.lower() for each_string in test]
   if final_category(test) == "not in category" or final_category(test) == "nut":
     count2 = 0
@@ -132,12 +131,12 @@ def main(ingredient):
       if str_match:
         break
       count2 = count2 + 1
-      if count2 == 9:
+      if count2 == 10:
         break
-    if count2 < 9:
+    if count2 < 10:
       if (trigger[count2] == "corn") or (trigger[count2] == "coconut") or (trigger[count2] == "seed") or (trigger[count2] == "corn") or (trigger[count2] == "peas") or (trigger[count2] == "beans") or (trigger[count2] == "soy"):
         return "plant"
-      elif (trigger[count2] == "cream"):
+      elif (trigger[count2] == "cream") or (trigger[count2] == "yogurt"):
         return "milk"
       elif (trigger[count2] == "wine"):
         return "alcohol"
@@ -148,7 +147,7 @@ def main(ingredient):
   except IndexError:
     ingredient = ingredient.split("+")
     if len(ingredient) == 0:
-      return "not in ontology" 
+      return "not in ontology"
     else:
       del ingredient[0]
       ingredient = "+".join(ingredient)
@@ -160,7 +159,7 @@ def main(ingredient):
     return "Chemical"
   elif chebi_check2 == "CHEBI" :
     return "Chemical"
-  else: 
+  else:
     foodon_check = keyword_id[0:6]
     if not foodon_check == "FOODON":
       keyword_id = get_idfromkeyword2(ingredient)
@@ -169,7 +168,7 @@ def main(ingredient):
     if result == "alcohol":
       category_list = get_category_alcohol(keyword_id, ingredient,i)
       result = final_category(category_list)
-      
+
   return result
-  
+
 i = 0

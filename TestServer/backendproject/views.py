@@ -1,50 +1,41 @@
 #to create endpoint (access data)
-from django.http import JsonResponse
-from .models import User
-from .serializers import UserSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status
+from .web_scraping import main
+from .mp_query import multi
+from .load_model import model_result, numbering
 
-from backendproject import serializers
+#GET API to check the dietary preference label for the ingredients given
+@api_view(['GET'])
+def CheckIngredient(request, url):
+    num = url.count(',')+1
+    if num > 1:
+        ing_list = url.split(',') #make an array
+        result_list=multi(ing_list) #categories
+        final = model_result(result_list) #label
+        array_numbering = numbering(result_list)
 
-@api_view(['GET', 'POST'])
-def user_list(request, format=None):
-    #GET
-    #get all users
-    #serialize them
-    #return json
-    if request.method == 'GET': #get data from database
-        users = User.objects.all()
-        serializer = UserSerializer(users, many=True)
-        #return JsonResponse({"users": serializer.data}, safe=False) #return json
-        return Response(serializer.data) #return django html
+    else:
+        ing_list = url
+        result_list = main(ing_list) #categories
+        final = model_result(result_list) #label
+        array_numbering = numbering(result_list)
 
 
-    if request.method == 'POST':
-        serializer =UserSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+    if final == 1:
+        final_label = 'vegan'
+    if final == 2:
+        final_label = 'lacto'
+    if final == 3:
+        final_label = 'none'
+    if final == 4:
+        final_label = 'ovo'
+    if final == 5:
+        final_label = 'pollo'
+    if final == 6:
+        final_label = 'pesco'
+    if final == 7:
+        final_label = 'lactoovo'
 
-@api_view(['GET', 'PUT', 'DELETE'])
-def user_detail(request, id, format=None):
-    try:
-        users = User.objects.get(pk=id) #pk is primary key
-    except User.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+    return Response({"ingredient_given": ing_list, "category": result_list, "array_numbering": array_numbering, "label_number": final, "label": final_label})
 
-    if request.method == 'GET':
-        serializer = UserSerializer(users)
-        return Response(serializer.data)
-
-    elif request.method == 'PUT':
-        serializer =UserSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    elif request.method == 'DELETE':
-        users.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
