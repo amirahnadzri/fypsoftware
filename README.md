@@ -54,3 +54,4 @@ In early discussion, we realized how determining whether a product is halal or n
 | Pollotarian  | People who eats poultry but not red meat or pork products  |
 | Lacto-ovo Vegetarian  | People who eats plant-based food and animal products such as eggs and dairy  |
 
+<h2>Structure</h2>
