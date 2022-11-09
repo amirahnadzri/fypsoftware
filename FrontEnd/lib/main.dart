@@ -1,11 +1,13 @@
 // @dart=2.9
 
 import 'dart:ui';
-
+import 'package:appmaindesign/model/profilesave.dart';
 import 'package:appmaindesign/model/userprofile.dart';
 import 'package:flutter/material.dart';
 import 'package:appmaindesign/HomePage.dart';
+import 'package:giffy_dialog/giffy_dialog.dart';
 import 'package:http/http.dart' as http;
+
 
 void main() {
   runApp(const MyApp());
@@ -34,6 +36,7 @@ class LoginPage extends StatefulWidget {
 ////////////////////////////////////////////////////////////////////////////////TODO LOGIN PAGE
 
 class _LoginPageState extends State<LoginPage> {
+  final myprofile_default _myprofile = myprofile_default();
 
   var emailcontroller = TextEditingController();
   var pwcontroller = TextEditingController();
@@ -45,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
   final formKey = GlobalKey<FormState>();
 
   Future<void> login() async {
-    //String uri = 'https://reqres.in/api/login';
+
     String urilg = 'https://amirahnadzri.pythonanywhere.com/api/login/';
     if (emailcontroller.text.isNotEmpty && pwcontroller.text.isNotEmpty){
       var responseget = await http.post(Uri.parse(urilg),
@@ -59,7 +62,10 @@ class _LoginPageState extends State<LoginPage> {
       if(responseget.statusCode==200){
         print('dapat login');
         print(responseget.body);
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const HomePage()));
+        //print(_myprofile.myfull_profile_default);
+        Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage(
+          //univ_username: emailcontroller.text,
+        )));
         Future.delayed(Duration.zero, () => showAlert(context));
       } else {
         print('wrong credentials');
@@ -224,7 +230,7 @@ class _LoginPageState extends State<LoginPage> {
                     color: Color.fromRGBO(214,213,168, 1), borderRadius: BorderRadius.circular(40)),
                 child: TextButton(
                   onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => const HomePage()));
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage()));
                     Future.delayed(Duration.zero, () => showAlert(context));
                   },
                   child: const Text('Continue as Guest',
@@ -273,11 +279,34 @@ class _LoginPageState extends State<LoginPage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        content: const Text("This will be the gif instruction how to use the app"),
+        insetPadding: const EdgeInsets.symmetric(horizontal: 20,
+            vertical: 170),
+        content: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(0.0),
+              child: Image.asset('assets/demo.gif',
+                height: 200.0,
+                width: 200.0,
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(
+                top: 15,
+                bottom: 5,
+              ),
+              child: Text("How To Use",
+                  style: TextStyle(color: Colors.black ,fontWeight: FontWeight.bold, fontSize: 24),),
+            ),
+            const Text("1. Take a picture or choose from gallery"),
+            const Text("2.Crop the ingredient section"),
+          ],
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('GOT IT!')
+            child: const Text('GOT IT!',
+            style: TextStyle(fontWeight: FontWeight.bold),)
           ),
         ],
       )
@@ -322,7 +351,7 @@ class _RegPageState extends State<RegPage> {
         if (resp_get.statusCode == 200) {
           print('dapat register');
           print(resp_get.body);
-          Navigator.push(context, MaterialPageRoute(builder: (_) => const HomePage()));
+          Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage()));
           Future.delayed(Duration.zero, () => showAlert(context));
         } else {
           print('tak dapat status code 200');
@@ -515,7 +544,7 @@ class _RegPageState extends State<RegPage> {
                   color: Color.fromRGBO(214,213,168, 1), borderRadius: BorderRadius.circular(40)),
               child: TextButton(
                 onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => const HomePage()));
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage()));
                   Future.delayed(Duration.zero, () => showAlert(context));
                 },
                 child: const Text('Continue as Guest',
@@ -560,13 +589,38 @@ class _RegPageState extends State<RegPage> {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          content: const Text("This will be the gif instruction how to use the app"),
+          insetPadding: const EdgeInsets.symmetric(horizontal: 20,
+              vertical: 170),
+          content: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(0.0),
+                child: Image.asset('assets/demo.gif',
+                  height: 200.0,
+                  width: 200.0,
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.only(
+                  top: 15,
+                  bottom: 5,
+                ),
+                child: Text("How To Use",
+                  style: TextStyle(color: Colors.black ,fontWeight: FontWeight.bold, fontSize: 24),),
+              ),
+              const Text("1. Take a picture or choose from gallery"),
+              const Text("2.Crop the ingredient section"),
+            ],
+          ),
           actions: [
             TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('GOT IT!')),
+                child: const Text('GOT IT!',
+                  style: TextStyle(fontWeight: FontWeight.bold),)
+            ),
           ],
-        ));
+        )
+    );
   }
 }
 

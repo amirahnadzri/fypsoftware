@@ -5,6 +5,7 @@ class Users {
   String email;
   String password;
   String username;
+  String imagePath;
 
   Users({
     //required this.id,
@@ -13,6 +14,7 @@ class Users {
     required this.email,
     required this.password,
     required this.username,
+    required this.imagePath,
   });
 
   factory Users.fromJson(Map<String, dynamic> json){
@@ -23,29 +25,7 @@ class Users {
       email: json["email"] as String,
       password: json["password"] as String,
       username: json["username"] as String,
+      imagePath: json["imageprofile"] as String,
     );
   }
 }
-
-
-/*
-class UserRequest {
-  String myEmail;
-  String myPassword;
-
-  UserRequest({
-    required this.myEmail,
-    required this.myPassword,
-  });
-
-  Map<String, dynamic> toJson() {
-    Map<String, dynamic> map = {
-      'myEmail': myEmail.trim(),
-      'myPassword':myPassword.trim(),
-    };
-
-    return map;
-  }
-}
-
- */

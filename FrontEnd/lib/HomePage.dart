@@ -1,5 +1,8 @@
 // @dart=2.9
 import 'dart:convert';
+import 'dart:ui';
+import 'package:appmaindesign/model/profilesave.dart';
+import 'package:appmaindesign/model/userpref.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'package:appmaindesign/model.dart';
@@ -9,29 +12,35 @@ import 'package:image_picker/image_picker.dart';
 import 'package:simple_ocr_plugin/simple_ocr_plugin.dart';
 import 'package:appmaindesign/model/Profile_widget.dart';
 import 'package:appmaindesign/model/userprofile.dart';
-import 'package:appmaindesign/model/userpref.dart';
 
 
 var parsedingr;
-ListModel test;
-List _ingrlist = [];
 List<ToDoElement> _toDoItems = [];
 PickedFile _pickedFile;
 File _croppedImage;
 File _imageFile;
 String _cleaningrlist;
-bool _isEditingText = false;
-bool _load = false;
+String resultjson;
+String fullprofjson;
+int switchimg = 0;
+String _textres = "";
+String infoprof_username;
+String infoprof_preference;
+String infoprof_pfp;
 TextEditingController _resultCtrl = TextEditingController();
 TextEditingController _arrayCtrl = TextEditingController();
 TextEditingController _editText = TextEditingController();
 TextEditingController _controller = TextEditingController();
 TextEditingController _controller1 = TextEditingController();
 enum DietGroup { vegan, lacto, none, ovo, pesco, pollo, lactoovo }
-final users = UserPreferences().MyUsers;
+String univ_username_prof = "";
+
+//final users = Userpref().UserPref;
 
 class HomePage extends StatefulWidget{
-  const HomePage({Key key}) : super(key: key);
+
+  String username;
+  HomePage({Key key, this.username}) : super(key: key);
   @override
   _HomePageState createState() =>_HomePageState();
 }
@@ -569,9 +578,7 @@ class _showResState extends State<showRes>{
                         color: Color.fromRGBO(214,213,168, 1), borderRadius: BorderRadius.circular(20)),
                     child: TextButton(
                       onPressed: () {
-                        //CircularProgressIndicator();
                         checkIngr();
-                        //print(_toDoItems.toString());
                       },
                       child: const Text('CHECK',
                         style: TextStyle(color: Colors.black, fontSize: 15),
@@ -590,12 +597,9 @@ class _showResState extends State<showRes>{
 
   Future<void> checkIngr() async {
 
-    //_toDoItems = finalized list of ingredients after edit
-
     String ing = _toDoItems.toString();
     print(ing);
     String _2space = ing.replaceAll('  ', '');
-    //String _1space = _2space.replaceAll(' ', '');
     String _brackl = _2space.replaceAll('{', '');
     String _brackr = _brackl.replaceAll('}', '');
     String _sqbrackl = _brackr.replaceAll('[', '');
@@ -606,9 +610,9 @@ class _showResState extends State<showRes>{
     print(_finalized);
 
     _cleaningrlist = _finalized;
-    //_load = true;
     Navigator.push(context, MaterialPageRoute(builder: (_) => const ResPage()));
-    Future.delayed(Duration.zero, () => showAlert(context));
+    Future.delayed(Duration.zero, () => showLoadingScreen(context));
+
     /*
     String Url = "https://amirahnadzri.pythonanywhere.com/check/" + _finalized;
     var checked = await http.get(Uri.parse(Url));
@@ -675,6 +679,13 @@ class _ProfileNavState extends State<ProfileNav> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        constraints: BoxConstraints.expand(),
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('assets/images/profile_bg.png'),
+                fit: BoxFit.cover,
+            )
+        ),
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -698,6 +709,70 @@ class myProfile extends StatefulWidget {
 
 class _myProfileState extends State<myProfile>{
 
+  final myprofile_default _myprofile = myprofile_default();
+
+  @override
+  void initState() {
+    _profileload(context);
+    super.initState();
+  }
+
+  Future _profileload (BuildContext context) async {
+
+    Map<String, dynamic> map = jsonDecode(_myprofile.myfull_profile_default);
+    var username_label = UserPref.fromJson(map);
+    String myusername_profile = username_label.username;
+    print(myusername_profile);
+
+    await Future.delayed(Duration(seconds: 0));
+    print("Trying to receive user information.");
+    String specific_url = "https://amirah.nadzri.pythonanywhere.com/api/info_specific/" + myusername_profile;
+    var myinfo_profile = await http.get(Uri.parse(specific_url));
+
+    if (myinfo_profile.statusCode == 200) {
+      print('Connected to database(non default)');
+      print(myinfo_profile.body);
+      fullprofjson = myinfo_profile.body;
+      SeparateInfo();
+    } else {
+      print('Not connected to database(non default)');
+      print(myinfo_profile.body);
+    }
+  }
+
+  SeparateInfo(){
+    Map<String, dynamic> map = jsonDecode(fullprofjson);
+    var label_userpref = UserPref.fromJson(map);
+
+    print("The label is ${label_userpref.username}");
+    infoprof_username = label_userpref.username;
+    print("The label is ${label_userpref.preference}");
+    infoprof_preference = label_userpref.preference;
+    print("The label is ${label_userpref.profile_pic}");
+    infoprof_pfp = label_userpref.profile_pic;
+
+  }
+  switchpfp(){
+    var _pfpimage;
+
+    if(switchpfp==0){
+      setState(() {
+        _pfpimage = Image(image: AssetImage('assets/images/defaultpfp.png'));
+      });
+
+    }
+    /*
+    else if(switchimg==1){
+      setState(() {
+        _resultImage = Image(image: AssetImage('assets/images/thumbsup.png'));
+      });
+      switchimg = 0;
+    }
+
+     */
+    return _pfpimage;
+  }
+
   DietGroup _site = DietGroup.none;
   @override
   Widget build(BuildContext context){
@@ -714,16 +789,66 @@ class _myProfileState extends State<myProfile>{
             children: [
 
               //////////////////////////////////////////////////////////////////TODO PROFILE PICTURE
+
+              const Padding(
+                padding: EdgeInsets.only(
+                    top: 50.0,
+                  bottom: 20.0
+                ),
+                child: Text("My Profile",
+                  style: TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),
+                ),
+              ),
+
+              Container(
+                padding: const EdgeInsets.only(
+                  top: 15,
+                  bottom: 15,
+                ),
+                width: 130,
+                height: 130,
+                decoration: BoxDecoration(
+                    image: const DecorationImage(
+                        image: AssetImage('assets/images/user_aizat.jpeg'),
+                        fit: BoxFit.cover,
+                    ),
+                    color: Color.fromRGBO(81,85,126, 1),
+                    borderRadius: BorderRadius.circular(100)
+
+                ),
+              ),
+
+              const Padding(
+                padding: EdgeInsets.only(
+                    top: 20.0,
+                ),
+                child: Text("@aizart",
+                  style: TextStyle(color: Colors.white, fontSize: 18,),
+                ),
+              ),
+
+              const Padding(
+                padding: EdgeInsets.only(
+                    top: 1.0,
+                ),
+                child: Text("Aizat Hamizuddin",
+                  style: TextStyle(color: Colors.white, fontSize: 18,),
+                ),
+              ),
+
+
+              /*
               Padding(
                 padding: const EdgeInsets.only(
                   top: 100,
                   bottom: 20
                 ),
+                child: ,
                 child: ProfileWidget(
-                  imagePath: users.imagePath,
+                  //imagePath: infoprof_pfp,
                   onClicked: () async {},
-                ),
-              ),
+
+                  */
 
               //Profile(2),
 
@@ -808,7 +933,7 @@ class _myProfileState extends State<myProfile>{
                     ),
 
                     ListTile(
-                      title: const Text('Egg Intolerance',
+                      title: const Text('Egg Intolerant',
                         style: TextStyle(color: Colors.white, fontSize: 15),
                       ),
                       dense: true,
@@ -888,12 +1013,14 @@ class _myProfileState extends State<myProfile>{
 Future<void> Profile(int i) async {
 
   if(i == 1){
-    buildName(users);
+    buildNoProfile();
+    //buildName(user);
   }
   else{
     buildNoProfile();
   }
 }
+
 
 Widget buildName(Users user) => Column(
   children: [
@@ -931,27 +1058,114 @@ class ResPage extends StatefulWidget{
 }
 
 class _ResPageState extends State<ResPage> {
+
   @override
   void initState() {
     _loadingend(context);
     super.initState();
   }
 
+  //////////////////////////////////////////////////////////////////////////////TODO GET API CHECK THE CATEGORY
+
   Future _loadingend (BuildContext context) async {
 
-    await Future.delayed(Duration(seconds: 5));
-    print("tengah check");
+    await Future.delayed(Duration(seconds: 0));
+    print("Trying to receive results.");
     String Url = "https://amirahnadzri.pythonanywhere.com/check/" + _cleaningrlist;
     var checked = await http.get(Uri.parse(Url));
+
     if (checked.statusCode == 200) {
-      print('dapat connect (1)');
+      print('Connection Succesful');
+      print(checked.body);
+      resultjson = checked.body;
+      ExtractRes();
+      Navigator.pop(context);
+    } else {
+      print('Connection Unsuccesful');
       print(checked.body);
       Navigator.pop(context);
-
-    } else {
-      print('tak dapat status code 200 (1)');
-      print(checked.body);
+      showLoadFailed(context);
     }
+  }
+
+  ExtractRes(){
+    Map<String, dynamic> map = jsonDecode(resultjson);
+    var labelres = ListModel.fromJson(map);
+
+    print("The label is ${labelres.label}");
+    String whatlabel = labelres.label;
+
+    if(whatlabel == "vegan"){
+      setState(() {
+        _textres = "This product is suitable for vegans.";
+        switchimg = 1;
+      });
+
+    }
+    else if(whatlabel == "lacto"){
+      setState(() {
+        _textres = "This product is not suitable for lactose intolerant people.";
+        switchimg = 2;
+      });
+    }
+    else if(whatlabel == "none"){
+      setState(() {
+        _textres = "This product is suitable for anyone without dietary restrictions.";
+        switchimg = 1;
+      });
+    }
+    else if(whatlabel == "ovo"){
+      setState(() {
+        _textres = "This product is not suitable for egg intolerant people.";
+        switchimg = 2;
+      });
+    }
+    else if(whatlabel == "pollo"){
+      setState(() {
+        _textres = "This product is suitable for pollotarians.";
+        switchimg = 1;
+      });
+    }
+    else if(whatlabel == "pesco"){
+      setState(() {
+        _textres = "This product is suitable for pescotarians.";
+        switchimg = 1;
+      });
+    }
+    else if(whatlabel == "lactoovo"){
+      setState(() {
+        _textres = "This product is suitable for lacto-ovo vegetarians.";
+        switchimg = 1;
+      });
+    }
+    else{
+      print("Please scan again.");
+    }
+  }
+
+  switchImg(){
+    var _resultImage;
+
+    if(switchimg==0){
+      setState(() {
+        _resultImage = Image(image: AssetImage('assets/images/empty.png'));
+      });
+
+    }
+    else if(switchimg==1){
+      setState(() {
+        _resultImage = Image(image: AssetImage('assets/images/thumbsup.png'));
+      });
+      switchimg = 0;
+    }
+    else if(switchimg==2){
+      setState(() {
+        _resultImage = Image(image: AssetImage('assets/images/thumbsdown.png'));
+      });
+      switchimg = 0;
+    }
+
+    return _resultImage;
   }
 
   @override
@@ -961,7 +1175,7 @@ class _ResPageState extends State<ResPage> {
         constraints: const BoxConstraints.expand(),
         decoration: const BoxDecoration(
             image: DecorationImage(
-                image: AssetImage('assets/images/ingrbg.png'),
+                image: AssetImage('assets/images/resbg.png'),
                 fit: BoxFit.cover,
                 colorFilter: ColorFilter.mode(Colors.black54, BlendMode.darken)
             )
@@ -975,21 +1189,77 @@ class _ResPageState extends State<ResPage> {
 
               Padding(
                 padding: const EdgeInsets.only(
-                    top: 40.0,
+                    top: 100.0,
+                    bottom: 20.0
+                ),
+                child: Center(
+                  child: Container(
+                    width: 200,
+                    height: 200,
+                    child: switchImg(),
+                  ),
+                ),
+              ),
+
+              const Text("Results",
+                style: TextStyle(color:Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.only(
+                    top: 20.0,
                     bottom: 20.0
                 ),
                 child: Center(
                   child: Container(
                     decoration: BoxDecoration(
                         color: Colors.white.withOpacity(0.8),
+                        borderRadius: BorderRadius.circular(50),
                         border: Border.all(
                           color: Colors.black26,
+
                         )
                     ),
-                    width: 350,
-                    height: 200,
-                    child: Image.file(_imageFile),
+                    width: 300,
+                    height: 150,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(_textres,
+                          style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    )
                   ),
+                ),
+              ),
+
+              Padding(
+                padding: const EdgeInsets.only(
+                    top: 20.0,
+                    bottom: 20.0
+                ),
+                child: Center(
+                  child: Container(
+                      decoration: BoxDecoration(
+                          color: Color.fromRGBO(81,85,126, 1),
+                          borderRadius: BorderRadius.circular(40),
+                          border: Border.all(
+                            color: Colors.black26,
+                          )
+                      ),
+                      width: 200,
+                      height: 50,
+                      child: FlatButton(
+                        onPressed: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage()));
+                          _textres = "";
+                          _toDoItems.clear();
+                        },
+                        child: const Text("Return to Home",
+                          style: TextStyle(color: Colors.white, fontSize: 20),)),
+                      )
                 ),
               ),
             ],
@@ -999,17 +1269,55 @@ class _ResPageState extends State<ResPage> {
     );
 
   }
+
 }
-void showAlert(BuildContext context) {
+
+////////////////////////////////////////////////////////////////////////////////TODO LOADING INDICATOR
+
+void showLoadingScreen(BuildContext context) {
   showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        content: Row(
-          children: [
+        insetPadding: const EdgeInsets.symmetric(horizontal: 20,
+        vertical: 300),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+              Radius.circular(10.0)
+          )
+        ),
+        content: Column(
+          children: const [
             CircularProgressIndicator(),
-            Container(margin: EdgeInsets.only(left: 7),child:Text("Loading..." )),
+            SizedBox(
+              height: 10,
+            ),
+            Text("Hold on!"),
+            Text("We're checking the ingredients for you."),
           ],
         ),
+      )
+  );
+}
+
+////////////////////////////////////////////////////////////////////////////////TODO FAILED CONNECTION
+
+void showLoadFailed(BuildContext context) {
+  showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        insetPadding: const EdgeInsets.symmetric(
+            horizontal: 20,
+            vertical: 300),
+        content: Column(
+          children: const [
+            Text("Failed to connect to the server."),
+          ],
+        ),
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => showRes())),
+              child: const Text('TRY AGAIN')),
+        ],
       )
   );
 }
