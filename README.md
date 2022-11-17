@@ -63,3 +63,9 @@ In early discussion, we realized how determining whether a product is halal or n
 | Machine Learning Codes  | Main Machine Learning training and development codes  |
 | Machine Learning Model Results  | Final results for Machine Learning development for future reference  |
 | Server  | Centre for back-end contents which include APIs, ontology, multiprocessor, and finalized machine learning model  |
+
+<h2>Presentation & Demonstration Video </h2>
+
+    Click on the thumbnail below to watch the video on YouTube.
+  
+[![fyp_thumbnail](https://user-images.githubusercontent.com/97009898/202474985-83df2668-8c3f-4fdc-b53f-942967f68593.jpg)](https://www.youtube.com/watch?v=ODjJHGjdtWk&t=1s)
