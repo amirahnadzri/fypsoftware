@@ -44,7 +44,7 @@ def model_result(input):
     testing = testing.sort_index()
     testing = np.array(testing)
 
-    filename = '/home/amirahnadzri/fypsoftware/TestServer/backendproject/finalized_model.sav'
+    filename = '/home/amirahnadzri/fypsoftware/Server/backendproject/finalized_model.sav'
 
     loaded_model = pickle.load(open(filename, 'rb'))
 
