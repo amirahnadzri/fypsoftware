@@ -55,3 +55,11 @@ In early discussion, we realized how determining whether a product is halal or n
 | Lacto-ovo Vegetarian  | People who eats plant-based food and animal products such as eggs and dairy  |
 
 <h2>Structure</h2>
+
+| Folder | Description |
+|  :---: |  :---: |
+| Documents  | Contains the Proposal and Final Report of this project  |
+| Front-end  | Flutter Application design  |
+| Machine Learning Codes  | Main Machine Learning training and development codes  |
+| Machine Learning Model Results  | Final results for Machine Learning development for future reference  |
+| Server  | Centre for back-end contents which include APIs, ontology, multiprocessor, and finalized machine learning model  |
