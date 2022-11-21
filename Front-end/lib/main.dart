@@ -1,11 +1,9 @@
 // @dart=2.9
 
 import 'dart:ui';
-import 'package:appmaindesign/model/profilesave.dart';
 import 'package:appmaindesign/model/userprofile.dart';
 import 'package:flutter/material.dart';
 import 'package:appmaindesign/HomePage.dart';
-import 'package:giffy_dialog/giffy_dialog.dart';
 import 'package:http/http.dart' as http;
 
 
@@ -36,9 +34,8 @@ class LoginPage extends StatefulWidget {
 ////////////////////////////////////////////////////////////////////////////////TODO LOGIN PAGE
 
 class _LoginPageState extends State<LoginPage> {
-  final myprofile_default _myprofile = myprofile_default();
 
-  var emailcontroller = TextEditingController();
+  var uncontroller = TextEditingController();
   var pwcontroller = TextEditingController();
   var value;
 
@@ -50,29 +47,31 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> login() async {
 
     String urilg = 'https://amirahnadzri.pythonanywhere.com/api/login/';
-    if (emailcontroller.text.isNotEmpty && pwcontroller.text.isNotEmpty){
+    if (uncontroller.text.isNotEmpty && pwcontroller.text.isNotEmpty){
       var responseget = await http.post(Uri.parse(urilg),
           body:(
               {
-                'username':emailcontroller.text,
+                'username':uncontroller.text,
                 'password':pwcontroller.text
               }
-              ));
+          )
+      );
 
       if(responseget.statusCode==200){
-        print('dapat login');
-        print(responseget.body);
-        //print(_myprofile.myfull_profile_default);
-        Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage(
-          //univ_username: emailcontroller.text,
-        )));
+        print('Login successful.');
+        //print(responseget.body);
+        Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage()));
         Future.delayed(Duration.zero, () => showAlert(context));
-      } else {
-        print('wrong credentials');
-        print(responseget.body);
       }
-    } else {
-      print('awat kosong');
+      else {
+        _WrongCredentialsAlert();
+        print('Incorrect username or password.');
+        //print(responseget.body);
+      }
+    }
+    else {
+      _NoInfoAlert();
+      //print('No information inserted');
     }
   }
 
@@ -86,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
-        constraints: BoxConstraints.expand(),
+        constraints: const BoxConstraints.expand(),
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/images/bg.png'),
@@ -107,7 +106,7 @@ class _LoginPageState extends State<LoginPage> {
                     bottom: 10.0
                 ),
                 child: Center(
-                  child: Container(
+                  child: SizedBox(
                     width: 300,
                     height: 300,
                     child: Image.asset('assets/images/title.png')
@@ -128,16 +127,16 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   child: Center(
                     child: TextFormField(
-                      controller: emailcontroller,
+                      controller: uncontroller,
                       decoration: const InputDecoration(
                           border: InputBorder.none,
                           prefixIcon: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                            padding: EdgeInsets.symmetric(horizontal: 20.0),
                             child: Icon(Icons.person, color: Colors.black),
                           ),
                           labelText: 'Username',
                           labelStyle: TextStyle(fontSize: 20, color: Colors.black),
-                          hintText: 'Enter username',
+                          hintText: 'Enter your username',
                           hintStyle: TextStyle(fontSize: 20, color: Colors.black)
                       ),
                     ),
@@ -163,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                       decoration: const InputDecoration(
                         border: InputBorder.none,
                         prefixIcon: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                          padding: EdgeInsets.symmetric(horizontal: 20.0),
                           child: Icon(Icons.lock, color: Colors.black),
                         ),
                         labelText: 'Password',
@@ -178,8 +177,8 @@ class _LoginPageState extends State<LoginPage> {
 
               //////////////////////////////////////////////////////////////////TODO FORGOT PASSWORD
 
-              const Padding(
-                padding: EdgeInsets.only(
+              Padding(
+                padding: const EdgeInsets.only(
                     right: 30.0,
                     bottom: 10.0
                 ),
@@ -187,8 +186,10 @@ class _LoginPageState extends State<LoginPage> {
                   child: Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
-                      onPressed: null,
-                      child: Text('Forgot Password?',
+                        onPressed: () {
+                          _ForgotpwAlert();
+                        },
+                      child: const Text('Forgot Password?',
                         style: TextStyle(color: Color.fromRGBO(214,213,168, 1), fontSize: 15),
                       ),
                     ),
@@ -227,7 +228,7 @@ class _LoginPageState extends State<LoginPage> {
                 height: 50,
                 width: 270,
                 decoration: BoxDecoration(
-                    color: Color.fromRGBO(214,213,168, 1), borderRadius: BorderRadius.circular(40)),
+                    color: const Color.fromRGBO(214,213,168, 1), borderRadius: BorderRadius.circular(40)),
                 child: TextButton(
                   onPressed: () {
                     Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage()));
@@ -273,43 +274,95 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-////////////////////////////////////////////////////////////////////////////////TODO DEMO GIF/VIDEO POP-UP
+////////////////////////////////////////////////////////////////////////////////TODO DEMO GIF/VIDEO & OTHER ALERTS POP-UP
 
   void showAlert(BuildContext context) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        insetPadding: const EdgeInsets.symmetric(horizontal: 20,
-            vertical: 170),
-        content: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(0.0),
-              child: Image.asset('assets/demo.gif',
-                height: 200.0,
-                width: 200.0,
+        builder: (context) => AlertDialog(
+          insetPadding: const EdgeInsets.symmetric(horizontal: 50, vertical: 180),
+          content: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(3.0),
+                child: Image.asset('assets/demo.gif',
+                  height: 230.0,
+                  width: 230.0,
+                ),
               ),
-            ),
-            const Padding(
-              padding: EdgeInsets.only(
-                top: 15,
-                bottom: 5,
-              ),
-              child: Text("How To Use",
-                  style: TextStyle(color: Colors.black ,fontWeight: FontWeight.bold, fontSize: 24),),
-            ),
-            const Text("1. Take a picture or choose from gallery"),
-            const Text("2.Crop the ingredient section"),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('GOT IT!',
-            style: TextStyle(fontWeight: FontWeight.bold),)
+              const SizedBox( height: 7.0),
+              const Text("How To Use", style: TextStyle(color: Colors.black ,fontWeight: FontWeight.bold, fontSize: 24),),
+              const SizedBox( height: 15.0),
+              const Text("1. Take a picture or choose from gallery"),
+              const Text("2.Crop the ingredient section"),
+
+            ],
           ),
-        ],
-      )
+          actions: [
+            TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('GOT IT!',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),)
+            ),
+          ],
+        )
+    );
+  }
+
+  void _ForgotpwAlert() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Please contact our helpdesk.'),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Close', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),)
+              ),
+            ],
+          );
+        }
+    );
+  }
+
+  void _WrongCredentialsAlert() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Incorrect username or password.'),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Try Again', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),)
+              ),
+            ],
+          );
+        }
+    );
+  }
+
+  void _NoInfoAlert() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Please insert your username or password.', textAlign: TextAlign.center,),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Okay', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),)
+              ),
+            ],
+          );
+        }
     );
   }
 }
@@ -349,21 +402,24 @@ class _RegPageState extends State<RegPage> {
                 }
             ));
         if (resp_get.statusCode == 200) {
-          print('dapat register');
-          print(resp_get.body);
-          Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage()));
-          Future.delayed(Duration.zero, () => showAlert(context));
-        } else {
-          print('tak dapat status code 200');
-          print(resp_get.body);
+          _RegSuccess();
+          //print('Register successful');
+          //print(resp_get.body);
+        }
+        else {
+          _UnabletoReg();
+          //print('Unable to register.');
+          //print(resp_get.body);
         }
       }
       else {
-        print('password re-enter different');
+        _ReenterPWfail();
+        //print('Please re-enter your password correctly.');
       }
     }
     else {
-      print('awat kosong');
+      _NoInfo();
+      //print('No information inserted.');
     }
   }
 
@@ -372,7 +428,7 @@ class _RegPageState extends State<RegPage> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
-        constraints: BoxConstraints.expand(),
+        constraints: const BoxConstraints.expand(),
         decoration: const BoxDecoration(
           image: DecorationImage(
               image: AssetImage('assets/images/signupbg.png'),
@@ -392,7 +448,7 @@ class _RegPageState extends State<RegPage> {
                   bottom: 10.0
               ),
               child: Center(
-                child: Container(
+                child: SizedBox(
                     width: 300,
                     height: 100,
                     child: Image.asset('assets/images/signuptext.png')
@@ -417,15 +473,15 @@ class _RegPageState extends State<RegPage> {
                         filled: true,
                         isDense: true,
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(width: 1, color: Colors.deepPurpleAccent),
+                          borderSide: const BorderSide(width: 1, color: Colors.deepPurpleAccent),
                           borderRadius: BorderRadius.circular(30.0),
                         ),
-                        icon: Icon(Icons.email, color: Colors.white),
+                        icon: const Icon(Icons.email, color: Colors.white),
                         hintText: 'Enter a valid email address',
-                        hintStyle: TextStyle(fontSize: 17, color: Colors.black)
+                        hintStyle: const TextStyle(fontSize: 17, color: Colors.black)
                       ),
                     ),
-                    SizedBox(height: 16,),
+                    const SizedBox(height: 16,),
                     TextFormField(
                       controller: su_usernamectrl,
                       decoration: InputDecoration(
@@ -433,15 +489,15 @@ class _RegPageState extends State<RegPage> {
                         filled: true,
                         isDense: true,
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(width: 1, color: Colors.deepPurpleAccent),
+                          borderSide: const BorderSide(width: 1, color: Colors.deepPurpleAccent),
                           borderRadius: BorderRadius.circular(30.0),
                         ),
-                        icon: Icon(Icons.person, color: Colors.white),
+                        icon: const Icon(Icons.person, color: Colors.white),
                         hintText: 'Enter username',
-                        hintStyle: TextStyle(fontSize: 17, color: Colors.black)
+                        hintStyle: const TextStyle(fontSize: 17, color: Colors.black)
                       ),
                     ),
-                    SizedBox(height: 16,),
+                    const SizedBox(height: 16,),
                     TextFormField(
                       controller: su_fnctrl,
                       decoration: InputDecoration(
@@ -449,15 +505,15 @@ class _RegPageState extends State<RegPage> {
                           filled: true,
                           isDense: true,
                           enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(width: 1, color: Colors.deepPurpleAccent),
+                            borderSide: const BorderSide(width: 1, color: Colors.deepPurpleAccent),
                             borderRadius: BorderRadius.circular(30.0),
                           ),
-                          icon: Icon(Icons.person, color: Colors.white),
+                          icon: const Icon(Icons.person, color: Colors.white),
                           hintText: 'Enter your first name',
-                          hintStyle: TextStyle(fontSize: 17, color: Colors.black)
+                          hintStyle: const TextStyle(fontSize: 17, color: Colors.black)
                       ),
                     ),
-                    SizedBox(height: 16,),
+                    const SizedBox(height: 16,),
                     TextFormField(
                       controller: su_lnctrl,
                       decoration: InputDecoration(
@@ -465,15 +521,15 @@ class _RegPageState extends State<RegPage> {
                           filled: true,
                           isDense: true,
                           enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(width: 1, color: Colors.deepPurpleAccent),
+                            borderSide: const BorderSide(width: 1, color: Colors.deepPurpleAccent),
                             borderRadius: BorderRadius.circular(30.0),
                           ),
-                          icon: Icon(Icons.person, color: Colors.white),
+                          icon: const Icon(Icons.person, color: Colors.white),
                           hintText: 'Enter your last name',
-                          hintStyle: TextStyle(fontSize: 17, color: Colors.black)
+                          hintStyle: const TextStyle(fontSize: 17, color: Colors.black)
                       ),
                     ),
-                    SizedBox(height: 16,),
+                    const SizedBox(height: 16,),
                     TextFormField(
                       controller: su_pwctrl,
                       obscureText: true,
@@ -482,15 +538,15 @@ class _RegPageState extends State<RegPage> {
                           filled: true,
                           isDense: true,
                           enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(width: 1, color: Colors.deepPurpleAccent),
+                            borderSide: const BorderSide(width: 1, color: Colors.deepPurpleAccent),
                             borderRadius: BorderRadius.circular(30.0),
                           ),
-                          icon: Icon(Icons.lock, color: Colors.white),
+                          icon: const Icon(Icons.lock, color: Colors.white),
                           hintText: 'Enter your password',
-                          hintStyle: TextStyle(fontSize: 17, color: Colors.black)
+                          hintStyle: const TextStyle(fontSize: 17, color: Colors.black)
                       ),
                     ),
-                    SizedBox(height: 16,),
+                    const SizedBox(height: 16,),
                     TextFormField(
                       controller: su_repwctrl,
                       obscureText: true,
@@ -499,12 +555,12 @@ class _RegPageState extends State<RegPage> {
                           filled: true,
                           isDense: true,
                           enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(width: 1, color: Colors.deepPurpleAccent),
+                            borderSide: const BorderSide(width: 1, color: Colors.deepPurpleAccent),
                             borderRadius: BorderRadius.circular(30.0),
                           ),
-                          icon: Icon(Icons.lock, color: Colors.white),
+                          icon: const Icon(Icons.lock, color: Colors.white),
                           hintText: 'Re-enter your password',
-                          hintStyle: TextStyle(fontSize: 17, color: Colors.black)
+                          hintStyle: const TextStyle(fontSize: 17, color: Colors.black)
                       ),
                     ),
                   ],
@@ -516,7 +572,7 @@ class _RegPageState extends State<RegPage> {
               height: 50,
               width: 270,
               decoration: BoxDecoration(
-                  color: Color.fromRGBO(81,85,126, 1),
+                  color: const Color.fromRGBO(81,85,126, 1),
                   borderRadius: BorderRadius.circular(40)),
               child: FlatButton(
                 onPressed: (){
@@ -541,7 +597,7 @@ class _RegPageState extends State<RegPage> {
               height: 50,
               width: 270,
               decoration: BoxDecoration(
-                  color: Color.fromRGBO(214,213,168, 1), borderRadius: BorderRadius.circular(40)),
+                  color: const Color.fromRGBO(214,213,168, 1), borderRadius: BorderRadius.circular(40)),
               child: TextButton(
                 onPressed: () {
                   Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage()));
@@ -584,42 +640,114 @@ class _RegPageState extends State<RegPage> {
       ),
     );
   }
-  //////////////////////////////////////////////////////////////////////////////TODO DEMO GIF/VIDEO POP-UP
+  //////////////////////////////////////////////////////////////////////////////TODO DEMO GIF/VIDEO & ALL ALERTS POP-UP
   void showAlert(BuildContext context) {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          insetPadding: const EdgeInsets.symmetric(horizontal: 20,
-              vertical: 170),
+          insetPadding: EdgeInsets.symmetric(horizontal: 50, vertical: 180),
           content: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.all(0.0),
+                padding: const EdgeInsets.all(3.0),
                 child: Image.asset('assets/demo.gif',
-                  height: 200.0,
-                  width: 200.0,
+                  height: 230.0,
+                  width: 230.0,
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.only(
-                  top: 15,
-                  bottom: 5,
-                ),
-                child: Text("How To Use",
-                  style: TextStyle(color: Colors.black ,fontWeight: FontWeight.bold, fontSize: 24),),
-              ),
+              const SizedBox( height: 7.0),
+              const Text("How To Use", style: TextStyle(color: Colors.black ,fontWeight: FontWeight.bold, fontSize: 24),),
+              const SizedBox( height: 15.0),
               const Text("1. Take a picture or choose from gallery"),
               const Text("2.Crop the ingredient section"),
+
             ],
           ),
           actions: [
             TextButton(
                 onPressed: () => Navigator.pop(context),
                 child: const Text('GOT IT!',
-                  style: TextStyle(fontWeight: FontWeight.bold),)
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),)
             ),
           ],
         )
+    );
+  }
+
+  void _RegSuccess() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Register Successful!', textAlign: TextAlign.center,),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Continue', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),)
+              ),
+            ],
+          );
+        }
+    );
+  }
+
+  void _ReenterPWfail() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Please re-enter your password correctly.', textAlign: TextAlign.center,),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Okay', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),)
+              ),
+            ],
+          );
+        }
+    );
+  }
+
+  void _UnabletoReg() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Uh Oh! Something went wrong.', textAlign: TextAlign.center,),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage()));
+                    Future.delayed(Duration.zero, () => showAlert(context));
+                  },
+                  child: const Text('Try Again Later', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),)
+              ),
+            ],
+          );
+        }
+    );
+  }
+
+  void _NoInfo() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Please insert all details.', textAlign: TextAlign.center,),
+            actions: <Widget>[
+              TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Okay', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),)
+              ),
+            ],
+          );
+        }
     );
   }
 }

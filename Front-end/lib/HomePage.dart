@@ -1,8 +1,6 @@
 // @dart=2.9
 import 'dart:convert';
 import 'dart:ui';
-import 'package:appmaindesign/model/profilesave.dart';
-import 'package:appmaindesign/model/userpref.dart';
 import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'package:appmaindesign/model.dart';
@@ -10,8 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:simple_ocr_plugin/simple_ocr_plugin.dart';
-import 'package:appmaindesign/model/Profile_widget.dart';
-import 'package:appmaindesign/model/userprofile.dart';
 
 
 var parsedingr;
@@ -35,12 +31,9 @@ TextEditingController _controller1 = TextEditingController();
 enum DietGroup { vegan, lacto, none, ovo, pesco, pollo, lactoovo }
 String univ_username_prof = "";
 
-//final users = Userpref().UserPref;
-
 class HomePage extends StatefulWidget{
 
-  String username;
-  HomePage({Key key, this.username}) : super(key: key);
+  const HomePage({Key key}) : super(key: key);
   @override
   _HomePageState createState() =>_HomePageState();
 }
@@ -51,7 +44,6 @@ class _HomePageState extends State<HomePage>{
 
   int _currentIndex = 0;
 
-  static const TextStyle optionStyle = TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static final List<Widget> _widgetOptions = <Widget>[
     const ScanNav(),
     const ProfileNav(),
@@ -61,7 +53,7 @@ class _HomePageState extends State<HomePage>{
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        constraints: BoxConstraints.expand(),
+        constraints: const BoxConstraints.expand(),
         decoration: const BoxDecoration(
             image: DecorationImage(
                 image: AssetImage('assets/images/homepagebg.png'),
@@ -113,7 +105,7 @@ class _ScanNavState extends State<ScanNav> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        constraints: BoxConstraints.expand(),
+        constraints: const BoxConstraints.expand(),
         decoration: const BoxDecoration(
           image: DecorationImage(
               image: AssetImage('assets/images/homepagebg.png'),
@@ -125,14 +117,12 @@ class _ScanNavState extends State<ScanNav> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
+              SizedBox(
                 height: 800,
                 child: pickImg(),
               ),
             ],
           ),
-
-
         ),
       ),
     );
@@ -151,7 +141,7 @@ class _pickImgState extends State<pickImg>{
   Widget build(BuildContext context){
     return Scaffold(
       body: Container(
-          constraints: BoxConstraints.expand(),
+          constraints: const BoxConstraints.expand(),
           decoration: const BoxDecoration(
               image: DecorationImage(
                   image: AssetImage('assets/images/homepagebg.png'),
@@ -171,7 +161,7 @@ class _pickImgState extends State<pickImg>{
                     height: 120,
                     width: 120,
                     decoration: BoxDecoration(
-                        color: Color(0xfff1e3c9),
+                        color: const Color(0xfff1e3c9),
                         borderRadius: BorderRadius.circular(100),
                         border: Border.all(color: Colors.black, width: 5)),
                     child: TextButton(
@@ -194,7 +184,7 @@ class _pickImgState extends State<pickImg>{
                     height: 120,
                     width: 120,
                     decoration: BoxDecoration(
-                        color: Color(0xfff1e3c9),
+                        color: const Color(0xfff1e3c9),
                         borderRadius: BorderRadius.circular(100),
                         border: Border.all(color: Colors.black, width: 5)),
                     child: TextButton(
@@ -251,7 +241,7 @@ class _pickImgState extends State<pickImg>{
 }
 
 class showRes extends StatefulWidget {
-  showRes({Key key, this.ingredient}) : super(key: key);
+  const showRes({Key key, this.ingredient}) : super(key: key);
 
   final String ingredient;
   @override
@@ -308,7 +298,7 @@ class _showResState extends State<showRes>{
                 color: Colors.white,
                 borderRadius: BorderRadius.all(Radius.circular(20.0)),
               ),
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               height: 180,
               width: 100,
               child: Column(
@@ -354,7 +344,7 @@ class _showResState extends State<showRes>{
                     ),
                     child: RaisedButton(
                       textColor: Colors.white,
-                      color: Color.fromRGBO(81,85,126, 1),
+                      color: const Color.fromRGBO(81,85,126, 1),
                       child: const Text('Done', style: TextStyle(fontSize: 18)),
                       shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(12)),
@@ -372,14 +362,15 @@ class _showResState extends State<showRes>{
               ),
             ),
           );
-        });
+        }
+    );
   }
 
   Widget _buildToDoItem(String toDoText, int index) {
+
+    ////////////////////////////////////////////////////////////////////////////TODO EACH INGR LIST ITEM
+
     return SizedBox(
-
-      ////////////////////////////////////////////////////////////////////////TODO EACH INGR LIST ITEM
-
       child: Container(
         height: 60,
         margin: const EdgeInsets.only(
@@ -389,10 +380,9 @@ class _showResState extends State<showRes>{
         ),
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.8),
-          border: Border.all(width: 1.5, color: Color.fromRGBO(81,85,126, 1)),
+          border: Border.all(width: 1.5, color: const Color.fromRGBO(81,85,126, 1)),
           borderRadius: const BorderRadius.all(Radius.circular(40)),
         ),
-
 
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -439,6 +429,7 @@ class _showResState extends State<showRes>{
         Expanded(
           child: ListView.builder(
             itemCount: _toDoItems.length,
+            // ignore: missing_return
             itemBuilder: (context, index) {
               if (index < _toDoItems.length) {
                 return _buildToDoItem(_toDoItems[index].task, index);
@@ -456,7 +447,7 @@ class _showResState extends State<showRes>{
   Widget build(BuildContext context){
     return Scaffold(
       body: Container(
-        constraints: BoxConstraints.expand(),
+        constraints: const BoxConstraints.expand(),
         decoration: const BoxDecoration(
             image: DecorationImage(
                 image: AssetImage('assets/images/ingrbg.png'),
@@ -500,7 +491,7 @@ class _showResState extends State<showRes>{
                       height: 45,
                       width: 150,
                       decoration: BoxDecoration(
-                          color: Color.fromRGBO(214,213,168, 1), borderRadius: BorderRadius.circular(20)),
+                          color: const Color.fromRGBO(214,213,168, 1), borderRadius: BorderRadius.circular(20)),
                       child: TextButton(
                         onPressed: () {
                           _onRecogniseTap();
@@ -508,30 +499,12 @@ class _showResState extends State<showRes>{
                         child: const Text('EXTRACT',
                           style: TextStyle(color: Colors.black, fontSize: 15),
                         ),
-
                       ),
                     ),
 
                     const SizedBox(
                       width: 20,
                     ),
-                    /*
-                    Container(
-                      height: 45,
-                      width: 150,
-                      decoration: BoxDecoration(
-                          color: Color.fromRGBO(214,213,168, 1), borderRadius: BorderRadius.circular(20)),
-                      child: TextButton(
-                        onPressed: () {
-                          checkIngr();
-                          //print(_toDoItems.toString());
-                        },
-                        child: const Text('CHECK',
-                          style: TextStyle(color: Colors.black, fontSize: 15),
-                        ),
-                      ),
-                    ),
-                     */
                   ],
                 ),
 
@@ -539,9 +512,8 @@ class _showResState extends State<showRes>{
 
                 const SizedBox(
                   height: 20,
-                )
+                ),
 
-        ,
                 const Text('1. Extract the list of ingredients.',
                   style: TextStyle(color: Colors.white, fontSize: 15),
                 ),
@@ -555,12 +527,11 @@ class _showResState extends State<showRes>{
                   style: TextStyle(color: Colors.white, fontSize: 15),
                 ),
 
-
                 //////////////////////////////////////////////////////////////////TODO BUILD LIST
 
                 Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: Container(
+                  child: SizedBox(
                       height: 400,
                       child: _buildToDoList()),
                 ),
@@ -575,7 +546,7 @@ class _showResState extends State<showRes>{
                     height: 45,
                     width: 150,
                     decoration: BoxDecoration(
-                        color: Color.fromRGBO(214,213,168, 1), borderRadius: BorderRadius.circular(20)),
+                        color: const Color.fromRGBO(214,213,168, 1), borderRadius: BorderRadius.circular(20)),
                     child: TextButton(
                       onPressed: () {
                         checkIngr();
@@ -613,27 +584,13 @@ class _showResState extends State<showRes>{
     Navigator.push(context, MaterialPageRoute(builder: (_) => const ResPage()));
     Future.delayed(Duration.zero, () => showLoadingScreen(context));
 
-    /*
-    String Url = "https://amirahnadzri.pythonanywhere.com/check/" + _finalized;
-    var checked = await http.get(Uri.parse(Url));
-    ResPage();
-
-    if (checked.statusCode == 200) {
-      print('dapat connect (1)');
-      print(checked.body);
-
-    } else {
-      print('tak dapat status code 200 (1)');
-      print(checked.body);
-    }
-    */
-
   }
 
 ////////////////////////////////////////////////////////////////////////////////TODO EXTRACT INGR FROM PRODUCT
   //TODO CREATE EDITABLE LIST OF INGR -> FINALIZED
 
   Future<void> _onRecogniseTap() async {
+
     String _result = await SimpleOcrPlugin.performOCR(_croppedImage.path);
     // TODO _result = { "code": 200, "text": "Ingredients: Enriched Corn Meal (Corn Meal   Ferrous Sulfate, Niacin, Thiamin Mononitrate,   Riboflavin, Folic Acid), Sunflower Oil, Cheddar   Cheese (Milk, Cheese Cultures, Salt, Enzymes),Whey, Maltodextrin (Made from Corn), Sea Salt   Natural Flavors, Sour Cream (Cultured Cream, Skim   Milk), Torula Yeast, Lactic Acid, and Citric Acid.   CONTAINS MILK INGREDIENTS.", "blocks": 2 }
 
@@ -662,7 +619,6 @@ class _showResState extends State<showRes>{
     });
   }
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////TODO PROFILE PAGE FEATURE
 
@@ -709,14 +665,11 @@ class myProfile extends StatefulWidget {
 
 class _myProfileState extends State<myProfile>{
 
-  final myprofile_default _myprofile = myprofile_default();
-
   @override
   void initState() {
-    _profileload(context);
     super.initState();
   }
-
+/*
   Future _profileload (BuildContext context) async {
 
     Map<String, dynamic> map = jsonDecode(_myprofile.myfull_profile_default);
@@ -740,45 +693,14 @@ class _myProfileState extends State<myProfile>{
     }
   }
 
-  SeparateInfo(){
-    Map<String, dynamic> map = jsonDecode(fullprofjson);
-    var label_userpref = UserPref.fromJson(map);
-
-    print("The label is ${label_userpref.username}");
-    infoprof_username = label_userpref.username;
-    print("The label is ${label_userpref.preference}");
-    infoprof_preference = label_userpref.preference;
-    print("The label is ${label_userpref.profile_pic}");
-    infoprof_pfp = label_userpref.profile_pic;
-
-  }
-  switchpfp(){
-    var _pfpimage;
-
-    if(switchpfp==0){
-      setState(() {
-        _pfpimage = Image(image: AssetImage('assets/images/defaultpfp.png'));
-      });
-
-    }
-    /*
-    else if(switchimg==1){
-      setState(() {
-        _resultImage = Image(image: AssetImage('assets/images/thumbsup.png'));
-      });
-      switchimg = 0;
-    }
-
-     */
-    return _pfpimage;
-  }
+ */
 
   DietGroup _site = DietGroup.none;
   @override
   Widget build(BuildContext context){
     return Scaffold(
       body: Container(
-          constraints: BoxConstraints.expand(),
+          constraints: const BoxConstraints.expand(),
           decoration: const BoxDecoration(
               image: DecorationImage(
                   image: AssetImage('assets/images/profile_bg.png'),
@@ -812,7 +734,7 @@ class _myProfileState extends State<myProfile>{
                         image: AssetImage('assets/images/user_aizat.jpeg'),
                         fit: BoxFit.cover,
                     ),
-                    color: Color.fromRGBO(81,85,126, 1),
+                    color: const Color.fromRGBO(81,85,126, 1),
                     borderRadius: BorderRadius.circular(100)
 
                 ),
@@ -835,22 +757,6 @@ class _myProfileState extends State<myProfile>{
                   style: TextStyle(color: Colors.white, fontSize: 18,),
                 ),
               ),
-
-
-              /*
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 100,
-                  bottom: 20
-                ),
-                child: ,
-                child: ProfileWidget(
-                  //imagePath: infoprof_pfp,
-                  onClicked: () async {},
-
-                  */
-
-              //Profile(2),
 
               const SizedBox(
                 height: 20,
@@ -875,7 +781,7 @@ class _myProfileState extends State<myProfile>{
                 ),
                 width: 250,
                 decoration: BoxDecoration(
-                  color: Color.fromRGBO(81,85,126, 1),
+                  color: const Color.fromRGBO(81,85,126, 1),
                   borderRadius: BorderRadius.circular(40)
                 ),
                 child: Column(
@@ -885,7 +791,7 @@ class _myProfileState extends State<myProfile>{
                         style: TextStyle(color: Colors.white, fontSize: 15),
                       ),
                       dense: true,
-                      visualDensity: VisualDensity(vertical: -4),
+                      visualDensity: const VisualDensity(vertical: -4),
                       leading: Radio(
                         value: DietGroup.none,
                         groupValue: _site,
@@ -902,7 +808,7 @@ class _myProfileState extends State<myProfile>{
                         style: TextStyle(color: Colors.white, fontSize: 15),
                       ),
                       dense: true,
-                      visualDensity: VisualDensity(vertical: -4),
+                      visualDensity: const VisualDensity(vertical: -4),
                       leading: Radio(
                         value: DietGroup.vegan,
                         groupValue: _site,
@@ -920,7 +826,7 @@ class _myProfileState extends State<myProfile>{
                         style: TextStyle(color: Colors.white, fontSize: 15),
                       ),
                       dense: true,
-                      visualDensity: VisualDensity(vertical: -4),
+                      visualDensity: const VisualDensity(vertical: -4),
                       leading: Radio(
                         value: DietGroup.lacto,
                         groupValue: _site,
@@ -937,7 +843,7 @@ class _myProfileState extends State<myProfile>{
                         style: TextStyle(color: Colors.white, fontSize: 15),
                       ),
                       dense: true,
-                      visualDensity: VisualDensity(vertical: -4),
+                      visualDensity: const VisualDensity(vertical: -4),
                       leading: Radio(
                         value: DietGroup.ovo,
                         groupValue: _site,
@@ -954,7 +860,7 @@ class _myProfileState extends State<myProfile>{
                         style: TextStyle(color: Colors.white, fontSize: 15),
                       ),
                       dense: true,
-                      visualDensity: VisualDensity(vertical: -4),
+                      visualDensity: const VisualDensity(vertical: -4),
                       leading: Radio(
                         value: DietGroup.pesco,
                         groupValue: _site,
@@ -971,7 +877,7 @@ class _myProfileState extends State<myProfile>{
                         style: TextStyle(color: Colors.white, fontSize: 15),
                       ),
                       dense: true,
-                      visualDensity: VisualDensity(vertical: -4),
+                      visualDensity: const VisualDensity(vertical: -4),
                       leading: Radio(
                         value: DietGroup.pollo,
                         groupValue: _site,
@@ -988,7 +894,7 @@ class _myProfileState extends State<myProfile>{
                         style: TextStyle(color: Colors.white, fontSize: 15),
                       ),
                       dense: true,
-                      visualDensity: VisualDensity(vertical: -4),
+                      visualDensity: const VisualDensity(vertical: -4),
                       leading: Radio(
                         value: DietGroup.lactoovo,
                         groupValue: _site,
@@ -999,7 +905,6 @@ class _myProfileState extends State<myProfile>{
                         },
                       ),
                     ),
-
                   ],
                 ),
               ),
@@ -1010,45 +915,7 @@ class _myProfileState extends State<myProfile>{
   }
 }
 
-Future<void> Profile(int i) async {
-
-  if(i == 1){
-    buildNoProfile();
-    //buildName(user);
-  }
-  else{
-    buildNoProfile();
-  }
-}
-
-
-Widget buildName(Users user) => Column(
-  children: [
-    const Text("Welcome"),
-    Text(
-      user.username,
-      style: TextStyle(color: Colors.white ,fontWeight: FontWeight.bold, fontSize: 24),
-    ),
-    const SizedBox(height: 4),
-    Text(
-      user.email,
-      style: TextStyle(color: Colors.grey),
-    )
-  ],
-);
-
-Widget buildNoProfile() => Column(
-  children: const [
-    Text("Welcome, user!"),
-    Text(
-      'You are not logged in.',
-      style: TextStyle(color: Colors.white ,fontWeight: FontWeight.bold, fontSize: 24),
-    ),
-  ],
-);
-
 ////////////////////////////////////////////////////////////////////////////////TODO SHOW RESULTS
-
 
 class ResPage extends StatefulWidget{
   const ResPage({Key key}) : super(key: key);
@@ -1069,7 +936,7 @@ class _ResPageState extends State<ResPage> {
 
   Future _loadingend (BuildContext context) async {
 
-    await Future.delayed(Duration(seconds: 0));
+    await Future.delayed(const Duration(seconds: 0));
     print("Trying to receive results.");
     String Url = "https://amirahnadzri.pythonanywhere.com/check/" + _cleaningrlist;
     var checked = await http.get(Uri.parse(Url));
@@ -1193,7 +1060,7 @@ class _ResPageState extends State<ResPage> {
                     bottom: 20.0
                 ),
                 child: Center(
-                  child: Container(
+                  child: SizedBox(
                     width: 200,
                     height: 200,
                     child: switchImg(),
@@ -1226,7 +1093,7 @@ class _ResPageState extends State<ResPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(_textres,
-                          style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
+                          style: const TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
                           textAlign: TextAlign.center,
                         ),
                       ],
@@ -1243,7 +1110,7 @@ class _ResPageState extends State<ResPage> {
                 child: Center(
                   child: Container(
                       decoration: BoxDecoration(
-                          color: Color.fromRGBO(81,85,126, 1),
+                          color: const Color.fromRGBO(81,85,126, 1),
                           borderRadius: BorderRadius.circular(40),
                           border: Border.all(
                             color: Colors.black26,
@@ -1253,7 +1120,7 @@ class _ResPageState extends State<ResPage> {
                       height: 50,
                       child: FlatButton(
                         onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (_) => HomePage()));
+                          Navigator.push(context, MaterialPageRoute(builder: (_) => const HomePage()));
                           _textres = "";
                           _toDoItems.clear();
                         },
