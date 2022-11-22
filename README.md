@@ -39,9 +39,9 @@ This is the Repository for 2022 성균관대학교 Software Final Year Project b
 
 The reason we started this project was because we too are a part of the group with dietary restrictions.
   
-> Due to religious dietary restrictions, we are not permitted to consume pork, alcohol and non-halal meat. As muslim students who are studying in a foreign country where muslims are considered a minority, it is hard for us to easily find food products that are permissible for us to consume.
+> Due to lactoce intolerance, it is difficult for us to purchase products that are suitable for our diet and for us to consume.
   
-In early discussion, we realized how determining whether a product is halal or not by its list of ingredients specifically meat-based products are not 100% accurate as halal meat are usually stamped with a halal certified logo and not mentioned in the list of ingredients. Therefore, we decided to not include religious dietary restrictions. We chose to cater to dietary restrictions such as veganism, lactose intolerance, egg intolerance, pescatarianism, pollotarianism and lacto-ovo vegetarianism as we are also able to consume food products that are within these groups' dietary restrictions.
+We also chose to cater to dietary restrictions such as veganism, egg intolerance, pescatarianism, pollotarianism and lacto-ovo vegetarianism on top of lactose intolerance in our project to broaden the choices for dietary restrictions in our application.
   
 <h2>Dietary Groups</h2>
   
