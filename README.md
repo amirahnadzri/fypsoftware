@@ -39,7 +39,7 @@ This is the Repository for 2022 성균관대학교 Software Final Year Project b
 
 The reason we started this project was because we too are a part of the group with dietary restrictions.
   
-> Due to lactoce intolerance, it is difficult for us to purchase products that are suitable for our diet and for us to consume.
+> Due to lactose intolerance, it is difficult for us to purchase products that are suitable for our diet and for us to consume.
   
 We also chose to cater to dietary restrictions such as veganism, egg intolerance, pescatarianism, pollotarianism and lacto-ovo vegetarianism on top of lactose intolerance in our project to broaden the choices for dietary restrictions in our application.
   
